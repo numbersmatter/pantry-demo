@@ -18,12 +18,12 @@ export default function RouteComponent() {
 
   return (
     <StaffShell staffData={data.staffData}>
-      <div className="bg-slate-400 px-2 py-2 sm:px-2 md:py-2 lg:px-8">
+      <div className="bg-red-500 px-2 py-2 sm:px-2 md:py-2 lg:px-8">
         {/* Your content */}
         <div className="md:flex md:items-center md:justify-between">
           <div className="min-w-0 flex-1">
-            <h4 className="text-lg font-bold leading-7 text-gray-900 sm:truncate sm:text-xl sm:tracking-tight">
-              CIS-T Staff Member
+            <h4 className="text-lg font-bold leading-7 text-gray-900 sm:truncate sm:text-xl sm:tracking-tight ">
+              Demo Account
             </h4>
           </div>
           <div className="mt-4 flex md:ml-4 md:mt-0">
@@ -42,10 +42,10 @@ export default function RouteComponent() {
           </div>
         </div>
       </div>
-      {/* <div className="pb-7"> */}
+      <div className="flex-1">
 
-      <Outlet />
-      {/* </div> */}
+        <Outlet />
+      </div>
       <footer className="bg-slate-400 px-2 py-2 sm:px-2 md:py-2 lg:px-8">
         {/* Your footer */}
         <div className="h-9" />
