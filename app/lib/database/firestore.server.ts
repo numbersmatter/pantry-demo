@@ -26,21 +26,21 @@ interface NonprofitDbPaths {
 export const fireDb = (path: FirestorCollectionPath) =>
   getFirestore().collection(path);
 
-export const cis_t_Db = {
-  servicePeriods: "/nonprofits/cist/service_periods",
-  seats: "/nonprofits/cist/seats",
+export const db_paths = {
+  servicePeriods: "/service_periods",
+  seats: "/seats",
   applications: "/nonprofits/cist/applications",
-  service_transactions: "/nonprofits/cist/service_transactions",
-  foodBoxOrders: "/nonprofits/cist/food_box_orders",
-  packedFoodBoxes: "/nonprofits/cist/inventory/food_pantry/packed_food_boxes",
-  programAreas: "/nonprofits/cist/program_areas",
-  programs: "/nonprofits/cist/programs",
-  persons: "/nonprofits/cist/persons",
-  families: "/nonprofits/cist/families",
-  service_list: "/nonprofits/cist/service_lists",
-  staff: "/nonprofits/cist/staff",
-  drive_thru: "/nonprofits/cist/drive_thru",
-  hello: "/nonprofits/cist/drive_thru",
+  service_transactions: "/service_transactions",
+  // foodBoxOrders: "/food_box_orders",
+  // packedFoodBoxes: "/nonprofits/cist/inventory/food_pantry/packed_food_boxes",
+  programAreas: "/program_areas",
+  programs: "/programs",
+  persons: "/persons",
+  families: "/families",
+  service_list: "/service_lists",
+  staff: "/staff",
+  drive_thru: "/drive_thru",
+  hello: "/drive_thru",
 };
 
 export const db = {

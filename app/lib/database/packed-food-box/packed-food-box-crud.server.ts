@@ -9,7 +9,7 @@ import {
   PackedFoodBox,
   PackedFoodBoxDbModel,
 } from "./types/packed-food-box-model";
-import { cis_t_Db } from "../firestore.server";
+import { db_paths } from "../firestore.server";
 
 function packedFoodBoxtoDbModel(
   packedFoodBox: PackedFoodBox
@@ -38,7 +38,7 @@ const packedFoodBoxConverter: FirestoreDataConverter<PackedFoodBox> = {
 
 const packedFoodBoxCollection = () =>
   getFirestore()
-    .collection(cis_t_Db.packedFoodBoxes)
+    .collection(db_paths.packedFoodBoxes)
     .withConverter(packedFoodBoxConverter);
 
 const create = async (packedFoodBox: PackedFoodBox): Promise<string> => {

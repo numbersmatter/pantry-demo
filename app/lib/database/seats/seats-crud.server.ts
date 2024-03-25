@@ -8,7 +8,7 @@ import {
   getFirestore,
 } from "firebase-admin/firestore";
 import { Seat, SeatAdd, SeatDbModel } from "./types/seats-model";
-import { cis_t_Db } from "../firestore.server";
+import { db_paths } from "../firestore.server";
 import { Feather } from "lucide-react";
 
 // function toFirestore
@@ -54,7 +54,7 @@ const seatConverter: FirestoreDataConverter<Seat> = {
 };
 
 const seats_collection = () =>
-  getFirestore().collection(cis_t_Db.seats).withConverter(seatConverter);
+  getFirestore().collection(db_paths.seats).withConverter(seatConverter);
 
 const create = async (seat: SeatAdd) => {
   const colRef = seats_collection();

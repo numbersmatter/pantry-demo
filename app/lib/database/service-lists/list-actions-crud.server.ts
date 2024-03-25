@@ -7,7 +7,7 @@ import {
   getFirestore,
 } from "firebase-admin/firestore";
 import { ServiceListId } from "./types";
-import { cis_t_Db } from "../firestore.server";
+import { db_paths } from "../firestore.server";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 
 interface TransactionRecord {
@@ -52,10 +52,10 @@ const converter = () => ({
 });
 
 const actionsCollection = (serviceListID: ServiceListId) => {
-  const actionCollectionPath = `${cis_t_Db.service_list}/${serviceListID}/actions`;
+  const actionCollectionPath = `${db_paths.service_list}/${serviceListID}/actions`;
 
   return getFirestore()
-    .collection(cis_t_Db.service_list)
+    .collection(db_paths.service_list)
     .doc(serviceListID)
     .collection("actions")
     .withConverter(converter());

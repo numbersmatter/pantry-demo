@@ -1,4 +1,4 @@
-import { cis_t_Db, fireDb } from "../firestore.server";
+import { db_paths, fireDb } from "../firestore.server";
 import { Program, ProgramDbModel } from "./types";
 
 const programsToDbModel = (program: Program): ProgramDbModel => {
@@ -24,7 +24,7 @@ const programConverter = {
 };
 
 const program_collection = () => {
-  return fireDb(cis_t_Db.programs).withConverter(programConverter);
+  return fireDb(db_paths.programs).withConverter(programConverter);
 };
 
 const create = async (program: Program) => {

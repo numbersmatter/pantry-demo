@@ -5,7 +5,7 @@ import {
   QueryDocumentSnapshot,
   getFirestore,
 } from "firebase-admin/firestore";
-import { cis_t_Db } from "../firestore.server";
+import { db_paths } from "../firestore.server";
 import { PersonAdd, PersonAppModel, PersonDbModel } from "./types";
 
 const personToDbModel = (person: PersonAppModel): PersonDbModel => {
@@ -33,7 +33,7 @@ const personConverter: FirestoreDataConverter<PersonAppModel> = {
 };
 
 const personCollection = () =>
-  getFirestore().collection(cis_t_Db.persons).withConverter(personConverter);
+  getFirestore().collection(db_paths.persons).withConverter(personConverter);
 
 const create = async (person: PersonAdd): Promise<string> => {
   const data = {

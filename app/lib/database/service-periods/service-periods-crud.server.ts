@@ -7,7 +7,7 @@ import {
   WithFieldValue,
   getFirestore,
 } from "firebase-admin/firestore";
-import { cis_t_Db, dataPoint } from "../firestore.server";
+import { db_paths, dataPoint } from "../firestore.server";
 import {
   ServicePeriod,
   ServicePeriodDbModel,
@@ -46,7 +46,7 @@ const servicePeriodConverter: FirestoreDataConverter<ServicePeriod> = {
 
 const service_periods_collection = () =>
   getFirestore()
-    .collection(cis_t_Db.servicePeriods)
+    .collection(db_paths.servicePeriods)
     .withConverter(servicePeriodConverter);
 
 const create = async (service_period: ServicePeriod) => {

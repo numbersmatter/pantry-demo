@@ -5,7 +5,7 @@ import {
   QueryDocumentSnapshot,
   getFirestore,
 } from "firebase-admin/firestore";
-import { cis_t_Db } from "../firestore.server";
+import { db_paths } from "../firestore.server";
 import { FamilyAdd, FamilyAppModel, FamilyDbModel } from "./types";
 
 const familyToDbModel = (family: FamilyAppModel): FamilyDbModel => {
@@ -31,7 +31,7 @@ const familyConverter: FirestoreDataConverter<FamilyAppModel> = {
 };
 
 const familyCollection = () =>
-  getFirestore().collection(cis_t_Db.families).withConverter(familyConverter);
+  getFirestore().collection(db_paths.families).withConverter(familyConverter);
 
 const create = async (family: FamilyAdd): Promise<string> => {
   const data = {

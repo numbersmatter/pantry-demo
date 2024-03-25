@@ -10,7 +10,7 @@ import {
   ServiceTransaction,
   ServiceTransactionDbModel,
 } from "./types/service-trans-model";
-import { cis_t_Db } from "../firestore.server";
+import { db_paths } from "../firestore.server";
 
 // function toFirestore
 
@@ -76,7 +76,7 @@ const serviceTransactionConverter: FirestoreDataConverter<ServiceTransaction> =
 
 const service_transactions_collection = () =>
   getFirestore()
-    .collection(cis_t_Db.service_transactions)
+    .collection(db_paths.service_transactions)
     .withConverter(serviceTransactionConverter);
 
 const create = async (serviceTransaction: ServiceTransaction) => {

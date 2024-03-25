@@ -7,7 +7,7 @@ import {
   FoodBoxOrder,
   FoodBoxOrderDbModel,
 } from "./types/food-box-order-model";
-import { cis_t_Db } from "../firestore.server";
+import { db_paths } from "../firestore.server";
 
 // converter to firestore
 
@@ -29,7 +29,7 @@ const foodBoxDataConverter: FirestoreDataConverter<FoodBoxOrder> = {
 
 const foodBoxOrderCollection = () =>
   getFirestore()
-    .collection(cis_t_Db.foodBoxOrders)
+    .collection(db_paths.foodBoxOrders)
     .withConverter(foodBoxDataConverter);
 
 const create = async (foodBoxOrder: FoodBoxOrder): Promise<string> => {

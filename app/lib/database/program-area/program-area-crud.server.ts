@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase-admin/firestore";
 import { ProgramArea, ProgramAreaDbModel } from "./program-area-model";
-import { cis_t_Db, fireDb } from "../firestore.server";
+import { db_paths, fireDb } from "../firestore.server";
 
 // to firestore function
 const programAreaToDbModel = (programArea: ProgramArea): ProgramAreaDbModel => {
@@ -28,7 +28,7 @@ const programAreaConverter = {
 };
 
 const programArea_collection = () => {
-  return fireDb(cis_t_Db.programAreas).withConverter(programAreaConverter);
+  return fireDb(db_paths.programAreas).withConverter(programAreaConverter);
 };
 
 const create = async (programArea: ProgramArea) => {

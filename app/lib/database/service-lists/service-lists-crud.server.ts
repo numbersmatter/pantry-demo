@@ -15,7 +15,7 @@ import {
   ServiceListDbModel,
   ServiceListId,
 } from "./types";
-import { cis_t_Db } from "../firestore.server";
+import { db_paths } from "../firestore.server";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 
 // function toFirestore
@@ -47,7 +47,7 @@ const serviceListConverter: FirestoreDataConverter<ServiceList> = {
 
 const serviceLists_collection = () =>
   getFirestore()
-    .collection(cis_t_Db.service_list)
+    .collection(db_paths.service_list)
     .withConverter(serviceListConverter);
 
 const create = async (serviceList: ServiceListAdd) => {

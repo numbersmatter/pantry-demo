@@ -1,5 +1,5 @@
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
-import { cis_t_Db } from "../firestore.server";
+import { db_paths } from "../firestore.server";
 import {
   DriveThruDbAddModel,
   DriveThruForm,
