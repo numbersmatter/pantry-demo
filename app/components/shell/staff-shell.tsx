@@ -11,13 +11,12 @@ import { StaffInfo } from '~/lib/auth/auth.server';
 
 const navigation = [
   { name: 'Home', href: '/', current: true },
-  { name: 'Program Areas', href: '/program-areas/', current: false },
-  { name: 'Programs', href: '/programs/', current: false },
-  { name: 'Service Periods', href: '/service-periods/', current: false },
   { name: 'Families', href: '/families/', current: false },
-  { name: 'Service Lists', href: '/service-lists/', current: false },
-  { name: 'Drive-Thru', href: '/drive-thru/', current: false },
-
+  // { name: 'Program Areas', href: '/program-areas/', current: false },
+  // { name: 'Programs', href: '/programs/', current: false },
+  // { name: 'Service Periods', href: '/service-periods/', current: false },
+  // { name: 'Service Lists', href: '/service-lists/', current: false },
+  // { name: 'Drive-Thru', href: '/drive-thru/', current: false },
 ]
 const userNavigation = [
   // { name: 'Your Profile', href: '/' },

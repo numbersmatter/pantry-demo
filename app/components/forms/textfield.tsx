@@ -10,6 +10,11 @@ export function FormTextField({
   return <div className="grid grid-cols-1 gap-2 pb-1 md:grid-cols-4 md:items-center md:gap-4">
     <Label className="text-left md:text-right">{label}</Label>
     <Input id={id} name={id} defaultValue={defaultValue} className="col-span-3" />
-    {error && <div className="col-span-4 text-red-500">{error}</div>}
+    {error && <div className="col-span-4 text-red-500 flex flex-row justify-end">
+      <p>
+        {error}
+      </p>
+    </div>
+    }
   </div>;
 }

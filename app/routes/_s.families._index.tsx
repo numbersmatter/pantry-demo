@@ -1,4 +1,4 @@
-import { json, useLoaderData } from "@remix-run/react"
+import { Link, json, useLoaderData } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { SectionHeaderWithAddAction } from "~/components/common/section-headers"
 import { Button } from "~/components/shadcn/ui/button"
@@ -39,7 +39,7 @@ export default function Route() {
     <div>
       <SectionHeaderWithAddAction
         title={`Families (${totatlFamilies})`}
-        addButton={<Button>Add</Button>}
+        addButton={<Link to="add">Add</Link>}
       />
       <DataTable columns={FamilyIndexTable} data={tableData} />
       <p>Staff page content</p>
