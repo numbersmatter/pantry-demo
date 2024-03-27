@@ -4,15 +4,11 @@ import { makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
 import { z } from "zod";
 import { FormTextField } from "~/components/forms/textfield";
-import { AddSeatsTabs } from "~/components/pages/service-periods/add-seat-tabs";
-import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { Button } from "~/components/shadcn/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/shadcn/ui/card";
-import { Label } from "~/components/shadcn/ui/label";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { familyDb } from "~/lib/database/families/family-crud.server";
 import { personDb } from "~/lib/database/person/person-crud.server";
-import { seatsDb } from "~/lib/database/seats/seats-crud.server";
 import { servicePeriodExists } from "~/lib/database/service-periods/domain-logic/checks.server";
 import { ServicePeriodId } from "~/lib/database/service-periods/types/service-periods-model";
 
@@ -77,20 +73,15 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);
   const periodID: ServicePeriodId = params["periodID"] ?? "periodID";
 
-  const exists = await servicePeriodExists(periodID);
-  if (!exists) {
-    return json({ periodID }, 404);
-  }
 
 
 
-
-  return json({ periodID });
+  return json({});
 };
 
 
 export default function Route() {
-  const { periodID } = useLoaderData<typeof loader>();
+  const { } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
 
   const errors = actionData?.errors ?? {};

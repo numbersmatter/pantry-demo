@@ -49,6 +49,9 @@ const studentSchema = z.object({
 const familyNamemutation = (familyId: string) => makeDomainFunction(familyNameSchema)(async (values) => {
   const fieldId = values.fieldId;
   const value = values.value;
+  if (fieldId === "family_name") {
+    await db.families.update(familyId, { family_name: value });
+  }
 
   return { values }
 })
@@ -241,7 +244,7 @@ function UpdateTextDialog({
             </DialogDescription>
           </DialogHeader>
           <input readOnly type="hidden" name="fieldId" value={fieldId} />
-          <input readOnly type="hidden" name="type" value={"address"} />
+          <input readOnly type="hidden" name="type" value={"family_name"} />
           <FormTextField
             label={fieldLabel}
             id={"value"}
