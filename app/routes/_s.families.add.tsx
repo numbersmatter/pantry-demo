@@ -40,7 +40,20 @@ const mutation = makeDomainFunction(schema)(async (values) => {
   const familyId = await familyDb.create({
     primary_user_id: "",
     family_name: `${values.fname} ${values.lname} family`,
-    members: [personId]
+    members: [personId],
+    address: {
+      street: values.street,
+      unit: values.unit,
+      city: values.city,
+      state: values.state,
+      zip: values.zip
+    },
+    students: {
+      tps: 0,
+      lds: 0,
+      tms: 0,
+      ths: 0
+    }
   });
 
   return { status: "success", personId, familyId, }

@@ -1,5 +1,18 @@
-import { PaperClipIcon } from '@heroicons/react/20/solid'
 import { FamilyAppModel } from '~/lib/database/families/types'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/shadcn/ui/dialog"
+import { useFetcher } from '@remix-run/react';
+import { useEffect, useState } from 'react';
+import { Button } from '~/components/shadcn/ui/button';
+import { FormTextField } from '~/components/forms/textfield';
 
 
 interface family {
@@ -7,6 +20,10 @@ interface family {
 
 
 export default function FamilyDisplay({ family }: { family: FamilyAppModel }) {
+
+
+
+
   return (
     <>
       <div className="py-3 px-4 sm:px-0">
@@ -19,11 +36,6 @@ export default function FamilyDisplay({ family }: { family: FamilyAppModel }) {
       </div>
       <div className="mt-6 border-t border-gray-100">
         <dl className="divide-y divide-gray-100">
-          <SingleTextUpdate
-            fieldLabel='Family Name'
-            fieldId='family_name'
-            fieldValue={family.family_name}
-          />
 
         </dl>
       </div>
@@ -48,11 +60,73 @@ function SingleTextUpdate({
         {fieldValue}
       </span>
       <span className="ml-4 flex-shrink-0">
-        <button type="button" className="rounded-md bg-white font-medium text-indigo-600 hover:text-indigo-500">
-          Update
-        </button>
+        <UpdateTextDialog
+          fieldId={fieldId}
+          fieldLabel={fieldLabel}
+          fieldValue={fieldValue}
+        />
       </span>
     </dd>
   </div>
 }
+
+
+
+interface ActionData {
+  success: boolean,
+  message: string,
+  errors: any,
+
+
+}
+
+function UpdateTextDialog({
+  fieldId, fieldLabel, fieldValue
+}: {
+  fieldId: string,
+  fieldLabel: string,
+  fieldValue: string
+}) {
+  const fetcher = useFetcher();
+  const [isOpen, setIsOpen] = useState(false);
+
+
+  const isFetching = fetcher.state !== 'idle';
+
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Update</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[550px]">
+        <fetcher.Form method="POST">
+          <DialogHeader>
+            <DialogTitle>{fieldLabel}</DialogTitle>
+            <DialogDescription>
+              Update the {fieldLabel} for this family.
+            </DialogDescription>
+          </DialogHeader>
+          <input type="hidden" name="fieldId" value={fieldId} />
+          <FormTextField
+            label={fieldLabel}
+            id={"value"}
+            defaultValue={fieldValue}
+          />
+          <DialogFooter >
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit">Submit</Button>
+          </DialogFooter>
+        </fetcher.Form>
+      </DialogContent>
+    </Dialog>
+
+
+  )
+
+}
+
+
 

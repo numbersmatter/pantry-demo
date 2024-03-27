@@ -8,7 +8,6 @@ import { ContainerPadded } from "~/components/common/containers";
 export default function FamiliesRoute() {
   return (
     <ContainerPadded>
-
       <Outlet />
     </ContainerPadded>
   );
