@@ -22,11 +22,30 @@ const familyConverter: FirestoreDataConverter<FamilyAppModel> = {
   },
   fromFirestore(snapshot: QueryDocumentSnapshot): FamilyAppModel {
     const data = snapshot.data() as FamilyDbModel;
-    return {
-      ...data,
+    const addressPlaceHolder = {
+      city: "",
+      state: "",
+      street: "",
+      unit: "",
+      zip: "",
+    };
+
+    const studentsPlaceHolder = {
+      lds: 0,
+      ths: 0,
+      tms: 0,
+      tps: 0,
+    };
+
+    const familyData = {
+      address: data?.address ?? addressPlaceHolder,
+      students: data?.students ?? studentsPlaceHolder,
+      members: data.members,
+      family_name: data.family_name,
       id: snapshot.id,
       created_date: data.created_date.toDate(),
     };
+    return familyData;
   },
 };
 
