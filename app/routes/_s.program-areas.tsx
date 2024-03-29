@@ -1,7 +1,8 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
+import { isRouteErrorResponse, useRouteError, json } from "@remix-run/react";
 import { Outlet } from "@remix-run/react";
 import { makeDomainFunction } from "domain-functions";
+import { performMutation } from "remix-forms";
 import { z } from "zod";
 import { RouteError, StandardError } from "~/components/common/ErrorPages";
 import { ContainerPadded } from "~/components/common/containers";
@@ -13,14 +14,14 @@ import { db } from "~/lib/database/firestore.server";
 const schema = z.object({
   name: z.string().min(3).max(100),
   description: z.string().min(0).max(100),
-  status: z.enum(["active", "inactive"]),
+  status: z.enum(["active", "inactive"]).default("active"),
 })
 
 const createMutation = makeDomainFunction(schema)(async (values) => {
   const program_area_id = await db.program_areas.create({
     ...values,
   })
-  return { status: "success", program_area_id }
+  return { program_area_id }
 })
 
 export default function RouteComponent() {
@@ -39,10 +40,19 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const formData = await cloneRequest.formData();
   const type = formData.get("type");
 
+  if (type === "create") {
+    const result = await performMutation({
+      request,
+      schema,
+      mutation: createMutation,
+    })
+
+    return json(result);
+  }
 
 
 
-  return {};
+  return json({ success: false, message: "Unknown action type" });
 };
 
 

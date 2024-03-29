@@ -8,6 +8,7 @@ import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { familyDb } from "~/lib/database/families/family-crud.server";
 import { FamilyAppModel } from "~/lib/database/families/types";
+import { db } from "~/lib/database/firestore.server";
 import { seatsDb } from "~/lib/database/seats/seats-crud.server";
 import { seatsOfServicePeriod } from "~/lib/database/seats/seats-tables";
 
@@ -18,7 +19,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const service_period_id = params.periodID ?? "periodID";
 
   // get seats in period
-  const seats_in_period = await seatsDb.queryByString(
+  const seats_in_period = await db.seats.queryByString(
     "service_period_id", service_period_id
   );
 
@@ -28,16 +29,16 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   // create an array of read promises for the families
   const familyPromises = seats_in_period.map(seat => {
-    return familyDb.read(seat.application_id);
+    return db.families.read(seat.family_id);
   });
 
   // resolve the promises
   const familiesUnfiltered = await Promise.all(familyPromises);
   const families = familiesUnfiltered.filter(family => family !== undefined) as FamilyAppModel[];
 
-  // add the family data to the seat object
+  // // add the family data to the seat object
   const seatsWithFamilies = seatsOrdered.map((seat, index) => {
-    const family = families.find(family => family.id === seat.application_id);
+    const family = families.find(family => family.id === seat.family_id);
     if (!family) return;
     return {
       ...seat,
@@ -63,7 +64,7 @@ export default function Route() {
       number_of_members: seat.number_of_members,
     }
   })
-  // const { table } = useSelectableTable({ data: seatsData, columns: seatsOfServicePeriod })
+  const { table } = useSelectableTable({ data: seatsData, columns: seatsOfServicePeriod })
 
   const menuItems = [
     { label: 'New Family and Seat', textValue: 'family' },

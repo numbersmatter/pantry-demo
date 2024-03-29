@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, useActionData, useFetcher, useLoaderData } from "@remix-run/react";
 import { makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
 import { z } from "zod";
@@ -8,6 +8,7 @@ import { FormDialog } from "~/components/common/form-dialog";
 import { SectionHeader } from "~/components/common/header-tabs";
 import { DataTable } from "~/components/display/data-table";
 import { SelectField } from "~/components/forms/select-field";
+import { FormTextArea } from "~/components/forms/text-area";
 import { FormTextField } from "~/components/forms/textfield";
 import { Button } from "~/components/shadcn/ui/button";
 import { DialogClose, DialogFooter, DialogHeader, DialogTitle } from "~/components/shadcn/ui/dialog";
@@ -72,12 +73,27 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 
-
+interface AreaActionData {
+  success: boolean;
+  errors?: {
+    [key: string]: string[]
+  }
+}
 
 
 export default function Route() {
   const { programs, programAreaOptions } = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const fetcher = useFetcher<AreaActionData>();
+
+  const fetchData = fetcher.data
+  const fetchErrorObj = fetchData ? fetchData?.errors ?? {} : {};
+
+  const fetchErrors = {
+    name: fetchErrorObj?.name ? fetchErrorObj.name[0] : "",
+    description: fetchErrorObj?.description ? fetchErrorObj.description[0] : "",
+    status: fetchErrorObj?.status ? fetchErrorObj.status[0] : "",
+  }
 
 
   const errors = {
@@ -123,16 +139,18 @@ export default function Route() {
           <DialogHeader>
             <DialogTitle>Add Program Area</DialogTitle>
           </DialogHeader>
-          <Form method="post">
+          <fetcher.Form method="post" action="/program-areas">
+            <input readOnly type="hidden" name="type" value="create" />
             <div className="grid gap-4 py-4 ">
-              <FormTextField label="Name" id="name" error={errors.name} />
+              <FormTextField label="Name" id="name" error={fetchErrors.name} />
               <SelectField
-                label={"Program Area"}
-                id={"program_area_id"}
-                selectOptions={programAreaOptions}
-                placeholder={"Choose Program Area"}
+                label={"Area Status"}
+                id={"status"}
+                selectOptions={[{ value: "active", label: "Active" }, { value: "inactive", label: "Inactive" }]}
+                placeholder={"Choose Program Area Status"}
+                defaultValue={"active"}
               />
-              <FormTextField label="Criteria" id="criteria" />
+              <FormTextArea label="Description" id="description" error={fetchErrors.description} />
             </div>
             <DialogFooter className="justify-between">
               <DialogClose asChild>
@@ -141,10 +159,10 @@ export default function Route() {
                 </Button>
               </DialogClose>
               <Button type={"submit"}>
-                Add Program
+                Create Program Area
               </Button>
             </DialogFooter>
-          </Form>
+          </fetcher.Form>
         </FormDialog>
 
       </div>

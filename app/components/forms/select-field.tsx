@@ -7,17 +7,19 @@ export function SelectField({
   selectOptions,
   placeholder,
   id,
-  label
+  label,
+  defaultValue
 }: {
   selectOptions: { value: string, label: string }[],
   placeholder: string,
   id: string,
-  label: string
+  label: string,
+  defaultValue?: string
 }) {
 
   return <div className="grid grid-cols-1 gap-2 pb-1 md:grid-cols-4 md:items-center md:gap-4">
     <Label className="text-left md:text-right">{label}</Label>
-    <Select name={id} >
+    <Select name={id} defaultValue={defaultValue ?? ""}>
       <SelectTrigger className="col-span-3">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
