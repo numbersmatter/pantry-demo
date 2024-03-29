@@ -35,12 +35,6 @@ export function FormDialog({ children, addButton }: { children?: React.ReactNode
       <DialogContent className="sm:max-w-[550px]">
         {children}
       </DialogContent>
-      <DialogFooter >
-        <DialogClose asChild>
-          <Button variant="outline">Cancel</Button>
-        </DialogClose>
-        <Button type="submit">Submit</Button>
-      </DialogFooter>
     </Dialog>
   )
 

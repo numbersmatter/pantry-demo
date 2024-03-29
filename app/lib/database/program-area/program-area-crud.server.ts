@@ -1,5 +1,9 @@
-import { Timestamp } from "firebase-admin/firestore";
-import { ProgramArea, ProgramAreaDbModel } from "./program-area-model";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
+import {
+  ProgramArea,
+  ProgramAreaAdd,
+  ProgramAreaDbModel,
+} from "./program-area-model";
 import { db_paths, fireDb } from "../firestore.server";
 
 // to firestore function
@@ -8,7 +12,7 @@ const programAreaToDbModel = (programArea: ProgramArea): ProgramAreaDbModel => {
     name: programArea.name,
     description: programArea.description,
     status: programArea.status,
-    created_date: Timestamp.fromDate(programArea.created_date),
+    created_date: FieldValue.serverTimestamp(),
   };
 };
 
@@ -31,16 +35,23 @@ const programArea_collection = () => {
   return fireDb(db_paths.programAreas).withConverter(programAreaConverter);
 };
 
-const create = async (programArea: ProgramArea) => {
+const create = async (programArea: ProgramAreaAdd) => {
   const programAreaCollRef = programArea_collection();
-  const docRef = await programAreaCollRef.add(programArea);
+
+  const programAreaData = {
+    ...programArea,
+    id: "",
+    created_date: FieldValue.serverTimestamp(),
+  };
+
+  const docRef = await programAreaCollRef.add(programAreaData);
   return docRef.id;
 };
 
 const read = async (id: string) => {
   const programAreaCollRef = programArea_collection();
   const docRef = await programAreaCollRef.doc(id).get();
-  return docRef.data();
+  return docRef.data() as ProgramArea | undefined;
 };
 
 const update = async (id: string, programArea: Partial<ProgramAreaDbModel>) => {
@@ -56,7 +67,17 @@ const remove = async (id: string) => {
 const getAll = async () => {
   const programAreaCollRef = programArea_collection();
   const snapshot = await programAreaCollRef.get();
-  return snapshot.docs.map((doc) => doc.data());
+  return snapshot.docs.map((doc) => {
+    const data = doc.data();
+    const test = data.created_date;
+    return {
+      id: doc.id,
+      name: data.name,
+      description: data.description,
+      status: data.status,
+      created_date: data.created_date,
+    };
+  });
 };
 
 export const programAreaDb = {

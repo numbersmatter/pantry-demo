@@ -10,7 +10,7 @@ import { DataTable } from "~/components/display/data-table";
 import { SelectField } from "~/components/forms/select-field";
 import { FormTextField } from "~/components/forms/textfield";
 import { Button } from "~/components/shadcn/ui/button";
-import { DialogFooter, DialogHeader, DialogTitle } from "~/components/shadcn/ui/dialog";
+import { DialogClose, DialogFooter, DialogHeader, DialogTitle } from "~/components/shadcn/ui/dialog";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { db } from "~/lib/database/firestore.server";
 import { programsOfAreaColumns } from "~/lib/database/programs/tables";
@@ -91,7 +91,7 @@ export default function Route() {
     <div>
       <SectionHeader title="Programs" text2="text2" text3="text3" />
       <div className="mt-6" />
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-3 py-2">
         <FormDialog addButton={<Button className="">Add Program</Button>}>
           <DialogHeader>
             <DialogTitle>Add Program</DialogTitle>
@@ -108,15 +108,45 @@ export default function Route() {
               <FormTextField label="Criteria" id="criteria" />
             </div>
             <DialogFooter className="justify-between">
-              <Button type={"button"} variant="outline">
-                Cancel
-              </Button>
+              <DialogClose asChild>
+                <Button type={"button"} variant="outline">
+                  Cancel
+                </Button>
+              </DialogClose>
               <Button type={"submit"}>
                 Add Program
               </Button>
             </DialogFooter>
           </Form>
         </FormDialog>
+        <FormDialog addButton={<Button className="">Add Program Area</Button>}>
+          <DialogHeader>
+            <DialogTitle>Add Program Area</DialogTitle>
+          </DialogHeader>
+          <Form method="post">
+            <div className="grid gap-4 py-4 ">
+              <FormTextField label="Name" id="name" error={errors.name} />
+              <SelectField
+                label={"Program Area"}
+                id={"program_area_id"}
+                selectOptions={programAreaOptions}
+                placeholder={"Choose Program Area"}
+              />
+              <FormTextField label="Criteria" id="criteria" />
+            </div>
+            <DialogFooter className="justify-between">
+              <DialogClose asChild>
+                <Button type={"button"} variant="outline">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button type={"submit"}>
+                Add Program
+              </Button>
+            </DialogFooter>
+          </Form>
+        </FormDialog>
+
       </div>
       <DataTable columns={programsOfAreaColumns} data={programs} />
       <pre>

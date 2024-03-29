@@ -1,7 +1,27 @@
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { isRouteErrorResponse, useRouteError } from "@remix-run/react";
 import { Outlet } from "@remix-run/react";
+import { makeDomainFunction } from "domain-functions";
+import { z } from "zod";
 import { RouteError, StandardError } from "~/components/common/ErrorPages";
 import { ContainerPadded } from "~/components/common/containers";
+import { protectedRoute } from "~/lib/auth/auth.server";
+import { db } from "~/lib/database/firestore.server";
+
+
+
+const schema = z.object({
+  name: z.string().min(3).max(100),
+  description: z.string().min(0).max(100),
+  status: z.enum(["active", "inactive"]),
+})
+
+const createMutation = makeDomainFunction(schema)(async (values) => {
+  const program_area_id = await db.program_areas.create({
+    ...values,
+  })
+  return { status: "success", program_area_id }
+})
 
 export default function RouteComponent() {
   return (
@@ -11,6 +31,20 @@ export default function RouteComponent() {
     </ContainerPadded>
   );
 }
+
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  let { user } = await protectedRoute(request);
+  const cloneRequest = request.clone();
+  const formData = await cloneRequest.formData();
+  const type = formData.get("type");
+
+
+
+
+  return {};
+};
+
 
 function ProgramAreaHeader() {
   return (
