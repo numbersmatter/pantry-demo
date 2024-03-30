@@ -68,11 +68,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     schema,
     mutation,
   });
-  if (!result.success) {
-    return result;
-  }
 
-  return redirect(`/service-lists/`);
+  return result;
+
 };
 
 

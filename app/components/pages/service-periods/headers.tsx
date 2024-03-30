@@ -93,6 +93,7 @@ const tabs: TabOption[] = [
   { name: 'Overview', to: '', end: true },
   { name: 'Seats', to: 'seats', end: false },
   { name: 'Services', to: 'services', end: false },
+  { name: 'Service Lists', to: 'service-lists', end: false },
 ]
 
 

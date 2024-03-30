@@ -8,6 +8,7 @@ import { familyDb } from "./families/family-crud.server";
 import { driveFormDb } from "./drive-thru/drive-thru-crud.server";
 import { bulkListActionsDb } from "./service-lists/list-actions-crud.server";
 import { seatsDb } from "./seats/seats-crud.server";
+import { serviceListsDb } from "./service-lists/service-lists-crud.server";
 
 // helper function to firestore data to typescript
 const converter = <T>() => ({
@@ -58,4 +59,5 @@ export const db = {
   families: familyDb,
   drive_thru: driveFormDb,
   bulk_list_actions: bulkListActionsDb,
+  service_lists: serviceListsDb,
 };

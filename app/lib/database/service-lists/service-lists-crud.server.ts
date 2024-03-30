@@ -123,6 +123,13 @@ const removeSeat = async (id: ServiceListId, seatId: string) => {
   });
 };
 
+const inPeriod = async (periodId: string) => {
+  const colRef = serviceLists_collection();
+  const query = colRef.where("service_period_id", "==", periodId);
+  const snapshot = await query.get();
+  return snapshot.docs.map((doc) => doc.data());
+};
+
 export const serviceListsDb = {
   create,
   read,
@@ -133,4 +140,5 @@ export const serviceListsDb = {
   removeItem,
   addSeat,
   removeSeat,
+  inPeriod,
 };
