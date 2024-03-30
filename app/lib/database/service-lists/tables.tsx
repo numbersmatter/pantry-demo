@@ -11,6 +11,15 @@ interface ServiceListIndexCols {
   description: string;
 }
 
+interface ServiceListActionsCols {
+  created_date: string;
+  records_created: number;
+  records_updated: number;
+  records_canceled: number;
+  records_unchanged: number;
+  id: string;
+}
+
 // export interface ItemLine {
 //   item_name: string;
 //   type: ItemTypes;
@@ -77,10 +86,43 @@ export const serviceListIndexCols: ColumnDef<ServiceListIndexCols>[] = [
     header: "Link",
     cell: ({ row }) => {
       return (
-        <Link to={`${row.original.id}`}>Go to List</Link>
+        <Link to={`/service-lists/${row.original.id}`}>Go to List</Link>
       )
     }
   }
 ]
 
+export const serviceListActionsCols: ColumnDef<ServiceListActionsCols>[] = [
+  {
+    accessorKey: "created_date",
+    header: "Created Date",
+  },
+  {
+    accessorKey: "records_created",
+    header: "Records Created",
+  },
+  {
+    accessorKey: "records_updated",
+    header: "Records Updated",
+  },
+  {
+    accessorKey: "records_canceled",
+    header: "Records Canceled",
+  },
+  {
+    accessorKey: "records_unchanged",
+    header: "Records Unchanged",
+  },
+  {
+    id: "id",
+    accessorKey: "id",
+    header: "Link",
+    cell: ({ row }) => {
+      return (
+        <Link to={`/service-lists/${row.original.id}`}>Go to List</Link>
+      )
+    }
+  }
+
+]
 

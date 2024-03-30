@@ -3,12 +3,14 @@ import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
-import { z } from "zod";
+import { number, z } from "zod";
 import ProgressPanels, { Step } from "~/components/common/progress-panels";
 import { SingleButtonForm } from "~/components/common/single-button-form";
 import { Button } from "~/components/shadcn/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/shadcn/ui/card"
 import { protectedRoute } from "~/lib/auth/auth.server";
+import { db } from "~/lib/database/firestore.server";
+import { TransactionRecord } from "~/lib/database/service-lists/list-actions-crud.server";
 import { serviceListsDb } from "~/lib/database/service-lists/service-lists-crud.server";
 import { calculateTotalValue } from "~/lib/database/service-lists/utils";
 import { serviceTransactionsDb } from "~/lib/database/service-transactions/service-transactions-crud.server";
@@ -45,7 +47,7 @@ const schema = z.object({
   serviceListID: z.string().length(20),
 })
 
-const mutation = makeDomainFunction(schema)(
+const mutation = (staff: { staff_id: string, staff_name: string }) => makeDomainFunction(schema)(
   (async (values) => {
     const serviceList = await serviceListsDb.read(values.serviceListID);
     if (!serviceList) {
@@ -54,12 +56,12 @@ const mutation = makeDomainFunction(schema)(
 
     const transactionValue = calculateTotalValue(serviceList.service_items)
 
-    const transaction_promises = serviceList.seats_array.map(async (seat) => {
+    const transaction_promises = serviceList.seats_array.map(async (seat_id) => {
       // create transaction
       const transactionData: ServiceTransaction = {
         service_type: serviceList.service_type,
         status: "pending",
-        delivered_to: seat,
+        delivered_to: seat_id,
         service_created_data: new Date(),
         service_updated_date: new Date(),
         id: "",
@@ -67,9 +69,15 @@ const mutation = makeDomainFunction(schema)(
         value: transactionValue,
       }
 
-      return serviceTransactionsDb.create(
-        transactionData
-      );
+      const transaction_id = await serviceTransactionsDb.create(transactionData);
+
+      const transaction_record: TransactionRecord = {
+        seat_id: seat_id,
+        transactionId: transaction_id,
+        value: transactionValue
+      }
+
+      return transaction_record;
     })
 
     const transactions = await Promise.all(transaction_promises);
@@ -79,14 +87,25 @@ const mutation = makeDomainFunction(schema)(
       { status: "applied" }
     )
 
-    console.log(values);
+
+
+    const bulk_action_id = await db.bulk_list_actions.create({
+      service_list_id: values.serviceListID,
+      records_created: transactions,
+      records_updated: [],
+      records_canceled: [],
+      records_unchanged: [],
+      seats_array: serviceList.seats_array,
+      line_items: serviceList.service_items,
+      staff,
+    })
     return transactions;
   })
 )
 
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
-  let { user } = await protectedRoute(request);
+  let { user, staffData } = await protectedRoute(request);
   const listID = params.listID ?? "listID";
   const serviceList = await serviceListsDb.read(listID);
   if (!serviceList) {
@@ -96,7 +115,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const result = await performMutation({
     request,
     schema,
-    mutation,
+    mutation: mutation({ staff_id: user.uid, staff_name: staffData.fname }),
   });
 
   return json({ result });
@@ -115,7 +134,7 @@ export default function Route() {
       <ProgressPanels steps={data.steps} />
       <PreviewCard
         serviceType="Food Box Request"
-        numberOfRecords={2}
+        numberOfRecords={data.numberOfRecords}
         serviceListID={data.listID}
       />
     </>
@@ -142,7 +161,7 @@ function PreviewCard({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p>This action will create {serviceType} transactions on {numberOfRecords.toString()} records</p>
+        <p>This action will create {numberOfRecords.toString()} {serviceType} transactions for {numberOfRecords.toString()} seats</p>
 
       </CardContent>
       <CardFooter className="flex flex-row justify-between" >

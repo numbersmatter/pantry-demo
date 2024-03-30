@@ -119,11 +119,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     return redirect(`/service-lists/${listID}`)
   }
 
-  const headerData = {
-    programName: "Service List",
-    servicePeriodName: "Spring 2024",
-    programAreaName: "CIS - Food Pantry"
-  }
 
 
 
@@ -137,7 +132,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'upcoming' },
   ];
 
-  return json({ user, headerData, serviceList, steps });
+  return json({ user, serviceList, steps });
 };
 
 

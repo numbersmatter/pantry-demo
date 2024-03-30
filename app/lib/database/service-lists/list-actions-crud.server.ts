@@ -10,9 +10,10 @@ import { ServiceListId } from "./types";
 import { db_paths } from "../firestore.server";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 
-interface TransactionRecord {
-  seatId: string;
+export interface TransactionRecord {
+  seat_id: string;
   transactionId: string;
+  value: number;
 }
 
 interface BulkAction {
@@ -21,9 +22,7 @@ interface BulkAction {
   records_canceled: TransactionRecord[];
   records_unchanged: TransactionRecord[];
   seats_array: string[];
-  user_id_created: string;
   line_items: ItemLine[];
-  applied_date: Timestamp;
   service_list_id: ServiceListId;
   staff: {
     staff_id: string;
@@ -112,8 +111,23 @@ const updateBulkAction = async ({
   };
 };
 
+const ofServiceList = async (service_list_id: ServiceListId) => {
+  const collRef = actionsCollection(service_list_id);
+  const query = await collRef.orderBy("created_date", "desc").get();
+
+  const data = query.docs.map((doc) => ({
+    ...doc.data(),
+    created_date: doc.data().created_date.toDate(),
+    updated_date: doc.data().updated_date.toDate(),
+    id: doc.id,
+  }));
+
+  return data;
+};
+
 export const bulkListActionsDb = {
   read: readBulkAction,
   create: createBulkAction,
   update: updateBulkAction,
+  ofServiceList: ofServiceList,
 };
