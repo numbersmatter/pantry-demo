@@ -125,9 +125,27 @@ const ofServiceList = async (service_list_id: ServiceListId) => {
   return data;
 };
 
+const last_action = async (service_list_id: ServiceListId) => {
+  const collRef = actionsCollection(service_list_id);
+  const query = await collRef.orderBy("created_date", "desc").limit(1).get();
+
+  if (query.empty) {
+    return null;
+  }
+
+  const doc = query.docs[0];
+  return {
+    ...doc.data(),
+    created_date: doc.data().created_date.toDate(),
+    updated_date: doc.data().updated_date.toDate(),
+    id: doc.id,
+  };
+};
+
 export const bulkListActionsDb = {
   read: readBulkAction,
   create: createBulkAction,
   update: updateBulkAction,
   ofServiceList: ofServiceList,
+  last_action: last_action,
 };

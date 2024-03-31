@@ -10,6 +10,7 @@ import { bulkListActionsDb } from "./service-lists/list-actions-crud.server";
 import { seatsDb } from "./seats/seats-crud.server";
 import { serviceListsDb } from "./service-lists/service-lists-crud.server";
 import { pendingActionsDb } from "./service-lists/pending-crud.server";
+import { serviceTransactionsDb } from "./service-transactions/service-transactions-crud.server";
 
 // helper function to firestore data to typescript
 const converter = <T>() => ({
@@ -63,4 +64,5 @@ export const db = {
   bulk_list_actions: bulkListActionsDb,
   service_lists: serviceListsDb,
   pending: pendingActionsDb,
+  service_transactions: serviceTransactionsDb,
 };

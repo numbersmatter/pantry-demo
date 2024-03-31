@@ -32,11 +32,12 @@ import { makeDomainFunction } from "domain-functions";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 import { seatsOfServiceList } from "~/lib/database/seats/seats-tables";
 import { seatsDb } from "~/lib/database/seats/seats-crud.server";
+import AddMenuItemDialog from "~/components/pages/service-lists/add-menu-item-dialog";
 
 const schema = z.object({
-  item_name: z.string(),
-  quantity: z.number(),
-  value: z.number(),
+  item_name: z.string().min(3).max(50),
+  quantity: z.coerce.number().positive().int(),
+  value: z.coerce.number().positive().int(),
 })
 
 const removeSchema = z.object({
@@ -79,32 +80,6 @@ const mutation = (service_list_id: string) => makeDomainFunction(schema)(
   })
 )
 
-const foodBoxRequest: FoodBoxOrder = {
-  id: "1",
-  photo_url: "",
-  notes: "",
-  value_estimation_process: "other",
-  value_estimation_type: "other",
-  delivery_method: 'DoorDash',
-  items: [
-    {
-      item_id: "fdsfef",
-      item_name: "March 1, 2024 Menu Box",
-      value: 7000,
-      quantity: 1,
-      type: "menu-box"
-    },
-    {
-      item_id: "fdfac",
-      item_name: "Bread Item",
-      value: 300,
-      quantity: 1,
-      type: "individual-items"
-    },
-
-  ],
-}
-
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -119,12 +94,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     return redirect(`/service-lists/${listID}`)
   }
 
-
-
-
-
-
   const baseUrl = `/service-lists/${listID}/preparing`
+  const actionUrl = `/service-lists/${listID}/preparing?index`
 
   const steps: Step[] = [
     { id: 'items', name: 'Menu Items', to: `${baseUrl}`, status: 'current' },
@@ -132,7 +103,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'upcoming' },
   ];
 
-  return json({ user, serviceList, steps });
+  return json({ user, serviceList, steps, baseUrl, actionUrl });
 };
 
 
@@ -153,14 +124,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 
   if (actionType === "addItem") {
-
     const result = await performMutation({
       request,
       schema,
       mutation: mutation(listID)
     })
-
-    return json({ result });
+    return json(result);
   }
 
   if (actionType === "removeItem") {
@@ -169,11 +138,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       schema: removeSchema,
       mutation: removeMutation(listID)
     })
-
-    return json({ result });
+    return json(result)
   }
 
-  return json({ message: "No action performed" })
+  const noActionError = {
+    item_name: [""],
+    quantity: [""],
+    value: [""],
+    _globel: [""]
+  }
+
+  return json({ success: false, errors: noActionError })
 };
 
 
@@ -197,35 +172,7 @@ export default function Route() {
           data={data.serviceList.service_items}
         />
         <CardFooter className="py-2">
-          <FormDialogVer1>
-            <Form method="post">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Other Item</CardTitle>
-                  <CardDescription>
-                    Add other item
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="space-y-1">
-                    <Label htmlFor="item_name">Name</Label>
-                    <Input name="item_name" id="item_name" />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="quantity">Quantity</Label>
-                    <Input id="quantity" name="quantity" type="number" />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="value">Unit Value</Label>
-                    <Input id="value" name="value" type="number" />
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button name="actionType" value="addItem" type="submit">Add Item</Button>
-                </CardFooter>
-              </Card>
-            </Form>
-          </FormDialogVer1>
+          <AddMenuItemDialog actionUrl={data.actionUrl} />
         </CardFooter>
       </Card>
 

@@ -1,5 +1,6 @@
 import {
   DocumentData,
+  FieldValue,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
   Timestamp,
@@ -95,6 +96,10 @@ const update = async (
   id: string,
   serviceTransaction: Partial<ServiceTransactionDbModel>
 ) => {
+  const updatedData = {
+    ...serviceTransaction,
+    service_updated_date: FieldValue.serverTimestamp(),
+  };
   const writeResult = await service_transactions_collection()
     .doc(id)
     .update(serviceTransaction);

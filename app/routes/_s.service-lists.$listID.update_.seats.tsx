@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { useLoaderData, } from "@remix-run/react";
+import { Form, isRouteErrorResponse, Outlet, useActionData, useFetcher, useLoaderData, useRouteError } from "@remix-run/react";
 import {
   Card,
   CardContent,
@@ -14,65 +14,17 @@ import {
 import { serviceListsDb } from "~/lib/database/service-lists/service-lists-crud.server";
 import ProgressPanels, { Step } from "~/components/common/progress-panels";
 import { z } from "zod";
+import { seatsOfServicePeriod } from "~/lib/database/seats/seats-tables";
 import { seatsDb } from "~/lib/database/seats/seats-crud.server";
+import { useState } from "react";
+import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { makeDomainFunction } from "domain-functions";
 import { ServiceListId } from "~/lib/database/service-lists/types";
 import { performMutation } from "remix-forms";
-import { AddSeatBox } from "~/components/pages/service-lists/add-seat-box";
+import { AddSeatBox, SeatBox } from "~/components/pages/service-lists/add-seat-box";
 
 
-const seatMutSchema = z.object({
-  seatID: z.string().length(20),
-  actionType: z.enum(["addSeat", "removeSeat"])
-})
 
-const addMutation = (listId: ServiceListId) => makeDomainFunction(seatMutSchema)(
-  async ({ seatID }) => {
-    const seat = await seatsDb.read(seatID);
-    if (!seat) {
-      return {
-        status: 404,
-        message: "Seat not found"
-      }
-    }
-
-    await serviceListsDb.addSeat(listId, seatID);
-
-    return {
-      status: 200,
-      message: "Seat added"
-    }
-
-  }
-)
-const removeMutation = (listId: ServiceListId) => makeDomainFunction(seatMutSchema)(
-  async ({ seatID }) => {
-    const seat = await seatsDb.read(seatID);
-    if (!seat) {
-      return {
-        status: 404,
-        message: "Seat not found"
-      }
-    }
-
-    await serviceListsDb.removeSeat(listId, seatID);
-
-    return {
-      status: 200,
-      message: "Seat removed"
-    }
-
-  }
-)
-
-interface SeatBox {
-  family_name: string;
-  enrolled_date: Date;
-  number_of_members: number;
-  id: string;
-  status: "added" | "notAdded"
-
-}
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -82,15 +34,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   if (!serviceList) {
     throw new Response("Service List not found", { status: 404 });
-  }
-  if (serviceList.status === "applied") {
-    return redirect(`/service-lists/${listID}`)
-  }
-
-  const headerData = {
-    programName: "Service List",
-    servicePeriodName: "Spring 2024",
-    programAreaName: "CIS - Food Pantry"
   }
 
   const allSeats = await seatsDb.queryByString("service_period_id", serviceList.service_period_id);
@@ -115,62 +58,23 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const seats = seatReads
     .filter((seat) => seat !== undefined).map((seat) => seat!);
 
-  const baseUrl = `/service-lists/${listID}/preparing`
+  const baseUrl = `/service-lists/${listID}/update`
   const actionUrl = `/service-lists/${listID}/preparing/seats`
 
   const steps: Step[] = [
-    { id: 'items', name: 'Menu Items', to: `${baseUrl}`, status: 'current' },
-    { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'upcoming' },
+    { id: 'items', name: 'Menu Items', to: `${baseUrl}`, status: "complete" },
+    { id: 'seat', name: 'Seat Selection', to: `${baseUrl}/seats`, status: 'current' },
     { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'upcoming' },
   ];
 
-  return json({ user, headerData, steps, seatsStatus, actionUrl });
+  return json({ user, steps, seatsStatus, actionUrl, serviceList });
 };
 
-
-export const action = async ({ request, params }: ActionFunctionArgs) => {
-  let { user } = await protectedRoute(request);
-  const listID = params.listID ?? "listID"
-  const cloneRequest = request.clone();
-  const formData = await cloneRequest.formData();
-  const actionType = formData.get("actionType");
-
-  const serviceList = await serviceListsDb.read(listID);
-  if (!serviceList) {
-    throw new Response("Service List not found", { status: 404 });
-  }
-
-  if (!actionType) {
-    throw new Response("Action Type not found", { status: 400 });
-  }
-
-  if (actionType === "addSeat") {
-    const result = await performMutation({
-      request,
-      schema: seatMutSchema,
-      mutation: addMutation(listID),
-    });
-
-    return result;
-  }
-
-  if (actionType === "removeSeat") {
-    const result = await performMutation({
-      request,
-      schema: seatMutSchema,
-      mutation: removeMutation(listID),
-    });
-
-    return result;
-  }
-
-
-  return json({ message: "No action performed" })
-};
 
 
 export default function Route() {
-  const { steps, seatsStatus, actionUrl } = useLoaderData<typeof loader>();
+  const { steps, seatsStatus, actionUrl, serviceList } = useLoaderData<typeof loader>();
+
 
   return (
     <>
@@ -202,9 +106,7 @@ export default function Route() {
                   <AddSeatBox actionUrl={actionUrl} key={seat.id} seat={data} />
                 )
               })
-
             }
-
           </div>
         </CardContent>
       </Card>

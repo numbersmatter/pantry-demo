@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData, isRouteErrorResponse, useRouteError, json, Outlet } from "@remix-run/react";
 import { StaffShell } from "~/components/shell/staff-shell";
-import { authenticator, protectedRoute } from "~/lib/auth/auth.server";
+import { protectedRoute } from "~/lib/auth/auth.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   let { user, staffData } = await protectedRoute(request);
