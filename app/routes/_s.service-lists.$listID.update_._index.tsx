@@ -1,8 +1,13 @@
 import { Link, json, useLoaderData } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
+import { db } from "~/lib/database/firestore.server";
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const listID = params.listID ?? "default";
+  const service_list = await db.service_lists.read(listID);
+
+
 
   return json({});
 };

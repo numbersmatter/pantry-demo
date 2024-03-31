@@ -8,11 +8,7 @@ export interface Step {
   status: 'complete' | 'current' | 'upcoming'
 }
 
-const steps: Step[] = [
-  { id: '01', name: 'Job details', to: '#', status: 'complete' },
-  { id: '02', name: 'Application form', to: '#', status: 'current' },
-  { id: '03', name: 'Preview', to: '#', status: 'upcoming' },
-]
+
 
 export default function ProgressPanels({ steps }: { steps: Step[] }) {
   return (
