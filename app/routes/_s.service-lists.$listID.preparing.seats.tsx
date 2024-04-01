@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { protectedRoute } from "~/lib/auth/auth.server";
-import { useLoaderData, } from "@remix-run/react";
+import { Form, useLoaderData, } from "@remix-run/react";
 import {
   Card,
   CardContent,
@@ -19,11 +19,17 @@ import { makeDomainFunction } from "domain-functions";
 import { ServiceListId } from "~/lib/database/service-lists/types";
 import { performMutation } from "remix-forms";
 import { AddSeatBox } from "~/components/pages/service-lists/add-seat-box";
+import { Button } from "~/components/shadcn/ui/button";
+import { db } from "~/lib/database/firestore.server";
 
 
 const seatMutSchema = z.object({
   seatID: z.string().length(20),
   actionType: z.enum(["addSeat", "removeSeat"])
+})
+
+const addAllSeatsSchema = z.object({
+  actionType: z.enum(["addAllSeats"])
 })
 
 const addMutation = (listId: ServiceListId) => makeDomainFunction(seatMutSchema)(
@@ -64,6 +70,24 @@ const removeMutation = (listId: ServiceListId) => makeDomainFunction(seatMutSche
 
   }
 )
+
+const addAllSeatsMutation = (listId: ServiceListId, service_period_id: string) => makeDomainFunction
+  (addAllSeatsSchema)(
+    async (values) => {
+      const allSeats = await db.seats.queryByString("service_period_id", service_period_id);
+      const seatIDs = allSeats.map((seat) => seat.id);
+
+      const addWrites = await db.service_lists.update(listId, {
+        seats_array: seatIDs
+      });
+
+      return {
+        status: 200,
+        message: "All Seats added"
+      }
+
+
+    })
 
 interface SeatBox {
   family_name: string;
@@ -163,6 +187,15 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
     return result;
   }
+  if (actionType === "addAllSeats") {
+    const result = await performMutation({
+      request,
+      schema: addAllSeatsSchema,
+      mutation: addAllSeatsMutation(listID, serviceList.service_period_id),
+    });
+
+    return result;
+  }
 
 
   return json({ message: "No action performed" })
@@ -182,7 +215,9 @@ export default function Route() {
             <CardDescription>
               Select the seats for this service list.
             </CardDescription>
-
+            <Form method="post">
+              <Button type="submit" name={"actionType"} value="addAllSeats" >Add all seats</Button>
+            </Form>
           </div>
         </CardHeader>
         <CardContent>
