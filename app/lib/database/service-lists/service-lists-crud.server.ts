@@ -105,7 +105,7 @@ const addItem = async (id: ServiceListId, item: ItemLine) => {
 const removeItem = async (id: ServiceListId, item: ItemLine) => {
   const docRef = serviceLists_collection().doc(id);
   await docRef.update({
-    serviceItems: FieldValue.arrayRemove(item),
+    service_items: FieldValue.arrayRemove(item),
   });
 };
 

@@ -34,7 +34,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const all_transactions = [...last_action.records_created, ...last_action.records_updated];
 
-  const update_transactions = all_transactions.map((transaction) => {
+  const update_records = all_transactions.filter((transaction) => {
+    return serviceList.seats_array.includes(transaction.seat_id)
+  })
+
+  const update_transactions = update_records.map((transaction) => {
     return {
       seat_id: transaction.seat_id,
       transactionId: transaction.transactionId,
@@ -47,6 +51,18 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     return !all_transactions.some((transaction) => transaction.seat_id === seat_id)
   })
 
+  const cancelled_records = all_transactions.filter((transaction) => {
+    return !serviceList.seats_array.includes(transaction.seat_id)
+  }).map((record) => {
+    return {
+      seat_id: record.seat_id,
+      transactionId: record.transactionId,
+      current_value: record.value,
+      new_value: calculateTotalValue(serviceList.service_items)
+    }
+  });
+
+
   const serviceType = serviceList.service_type;
   const numberOfRecords = serviceList.seats_array.length;
   const baseUrl = `/service-lists/${listID}/update`
@@ -57,7 +73,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'current' },
   ];
 
-  return json({ newSeats, numberOfRecords, steps, listID, last_action, all_transactions, update_transactions });
+  return json({ newSeats, numberOfRecords, steps, listID, last_action, all_transactions, update_transactions, cancelled_records });
 };
 
 const schema = z.object({
@@ -88,7 +104,12 @@ const mutation = (staff: { staff_id: string, staff_name: string }) => makeDomain
 
     const all_transactions = [...last_action.records_created, ...last_action.records_updated];
 
-    const update_transactions = all_transactions.map((transaction) => {
+    const update_records = all_transactions.filter((transaction) => {
+      return serviceList.seats_array.includes(transaction.seat_id)
+    })
+
+
+    const update_transactions = update_records.map((transaction) => {
       return {
         seat_id: transaction.seat_id,
         transactionId: transaction.transactionId,
@@ -120,6 +141,16 @@ const mutation = (staff: { staff_id: string, staff_name: string }) => makeDomain
       return !all_transactions.some((transaction) => transaction.seat_id === seat_id)
     })
 
+    const cancelled_records = all_transactions.filter((transaction) => {
+      return !serviceList.seats_array.includes(transaction.seat_id)
+    });
+
+    const cancelled_promises = cancelled_records.map((record) => {
+      return db.service_transactions.update(record.transactionId, { status: "cancelled" })
+    })
+
+    await Promise.all(cancelled_promises);
+
     const created_seats_transactions = newSeats.map(async (seat_id) => {
       // create transaction
       const transactionData: ServiceTransaction = {
@@ -150,18 +181,14 @@ const mutation = (staff: { staff_id: string, staff_name: string }) => makeDomain
       service_list_id: values.serviceListID,
       records_created: created_transactions,
       records_updated,
-      records_canceled: [],
+      records_canceled: cancelled_records,
       records_unchanged: [],
       seats_array: serviceList.seats_array,
       line_items: serviceList.service_items,
       staff,
     })
 
-
-
-
-
-    return {};
+    return { bulk_action_id, serviceListID: values.serviceListID };
   })
 )
 
@@ -206,13 +233,39 @@ export default function Route() {
         newSeats={data.newSeats}
         all_transactions={data.all_transactions}
         update_transactions={data.update_transactions}
-      />
+      >
+        <div className="prose">
+          <h4>New Records</h4>
+          <p>This action will create new records for:</p>
+          {
+            data.newSeats.length === 0 && <p>No new records will be created</p>
+          }
+          <ul>
+            {
+              data.newSeats.map((seat) => {
+                return <li key={seat}>{seat}</li>
+              })
+            }
+          </ul>
+        </div>
+        <div className="prose">
+          <h4>Cancelled Records</h4>
+          <p>This action will cancel the following records:</p>
+          <DataTable columns={updateSeatsCols} data={data.cancelled_records} />
+        </div>
+        <div className="prose">
+          <h4>Updated Records</h4>
+          <p>This action will update the following records:</p>
+          <DataTable columns={updateSeatsCols} data={data.update_transactions} />
+        </div>
+      </PreviewCard>
     </>
   )
 }
 
 
 function PreviewCard({
+  children,
   serviceType,
   numberOfRecords,
   serviceListID,
@@ -221,6 +274,7 @@ function PreviewCard({
   all_transactions,
   update_transactions,
 }: {
+  children: React.ReactNode,
   serviceType: string,
   numberOfRecords: number,
   serviceListID: string,
@@ -239,25 +293,8 @@ function PreviewCard({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="prose">
-          <h4>New Records</h4>
-          <p>This action will create new records for:</p>
-          {
-            newSeats.length === 0 && <p>No new records will be created</p>
-          }
-          <ul>
-            {
-              newSeats.map((seat) => {
-                return <li key={seat}>{seat}</li>
-              })
-            }
-          </ul>
-        </div>
-        <div className="prose">
-          <h4>Updated Records</h4>
-          <p>This action will update the following records:</p>
-          <DataTable columns={updateSeatsCols} data={update_transactions} />
-        </div>
+        {children}
+
 
 
       </CardContent>
