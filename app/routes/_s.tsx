@@ -12,7 +12,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return null;
 };
 
-const production = process.env.NODE_ENV === "production";
+const demo = process.env.DEMO === "true";
 
 export default function RouteComponent() {
   const data = useLoaderData<typeof loader>()
@@ -21,7 +21,7 @@ export default function RouteComponent() {
   return (
     <StaffShell staffData={data.staffData}>
       {
-        production ? null : (
+        !demo ? null : (
           <div className="bg-red-500 px-2 py-2 sm:px-2 md:py-2 lg:px-8">
             <div className="md:flex md:items-center md:justify-between">
               <div className="min-w-0 flex-1">
