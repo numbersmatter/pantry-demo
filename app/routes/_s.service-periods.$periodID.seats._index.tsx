@@ -66,14 +66,9 @@ export default function Route() {
   })
   const { table } = useSelectableTable({ data: seatsData, columns: seatsOfServicePeriod })
 
-  const menuItems = [
-    { label: 'New Family and Seat', textValue: 'family' },
-    { label: 'New Seat', textValue: 'seat' },
-  ]
 
-  const onMenuSelect = (value: string) => {
-    console.log('menu select', value);
-  }
+
+
 
   return (
     <main className="pb-9 ">

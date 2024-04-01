@@ -95,7 +95,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 
   if (fieldID === "notes") {
-    console.log(" is notes")
+
     const result = await performMutation({
       request,
       schema: schemaUpdateNotes,
@@ -105,7 +105,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     return json(result);
   }
 
-  console.log(" is number")
+
 
   const result = await performMutation({
     request,

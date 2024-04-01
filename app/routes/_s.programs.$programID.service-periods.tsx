@@ -82,10 +82,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const clonedRequest = request.clone();
 
   const formData = Object.fromEntries(await clonedRequest.formData());
-  console.log("formData", formData);
+
 
   const parse = schema.safeParse(formData);
-  console.log("parse", JSON.stringify(parse, null, 2));
+
   if (!parse.success) {
     const errors: { [key: string]: string[] } = {};
     parse.error.errors.forEach((e) => {

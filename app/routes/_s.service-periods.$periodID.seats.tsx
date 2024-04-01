@@ -15,14 +15,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export default function Route() {
   const { baseUrl } = useLoaderData<typeof loader>();
 
-  const menuItems = [
-    { label: 'New Family and Seat', textValue: 'family' },
-    { label: 'New Seat', textValue: 'seat' },
-  ]
-
-  const onMenuSelect = (e: Event) => {
-    console.log('menu select', e.currentTarget);
-  }
 
   return (
     <main>

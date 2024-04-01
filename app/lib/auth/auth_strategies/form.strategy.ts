@@ -29,8 +29,6 @@ export const formStrategy = new FormStrategy<User>(async ({ form }) => {
     return user;
   } else {
     const { email, password } = signInSchema.parse(form);
-    console.log("email:", email);
-    console.log("password:", password);
 
     let sessionCookie = await signIn(email, password);
     const decodedIdToken = await authFirebase.server.verifySessionCookie(

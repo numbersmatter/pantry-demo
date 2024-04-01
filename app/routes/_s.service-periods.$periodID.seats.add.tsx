@@ -100,7 +100,6 @@ const manualAddSeat = (service_period_Id: string) => makeDomainFunction(addSeatS
     }
   })
 
-  console.log(values);
   return { status: "success", personId, familyId, seatId }
 })
 

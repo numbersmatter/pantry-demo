@@ -14,7 +14,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function Route() {
   const { baseUrl } = useLoaderData<typeof loader>();
-  console.log("url", baseUrl)
+
   return (
     <main>
       <ServicePeriodTabs baseUrl={baseUrl} defaultTab="" />

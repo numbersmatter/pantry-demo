@@ -34,7 +34,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const requestClone = await request.clone();
   const formData = await requestClone.formData();
-  console.log("data:", formData);
+
   // Do something with the data
   return await authenticator.authenticate(
     AuthStrategies.FORM,
@@ -48,7 +48,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function FormRoute() {
   const data = useLoaderData<typeof loader>();
-  console.log("data:", data);
+
 
   return (
     <SignInScreen />
