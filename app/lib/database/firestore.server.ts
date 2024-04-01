@@ -34,7 +34,7 @@ if (!process.env.BASEPATH) {
   throw new Error("BASEPATH environment variable is missing");
 }
 
-const basePath = process.env.BASEPATH;
+export const basePath = process.env.BASEPATH;
 
 export const db_paths = {
   servicePeriods: `${basePath}service_periods`,

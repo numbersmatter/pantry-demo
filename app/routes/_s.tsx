@@ -2,17 +2,21 @@ import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
 import { useLoaderData, isRouteErrorResponse, useRouteError, json, Outlet } from "@remix-run/react";
 import { StaffShell } from "~/components/shell/staff-shell";
 import { protectedRoute } from "~/lib/auth/auth.server";
+import { basePath } from "~/lib/database/firestore.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   let { user, staffData } = await protectedRoute(request);
-  return json({ user, staffData });
+
+  const demo = basePath === "/"
+
+  return json({ user, staffData, demo });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   return null;
 };
 
-const demo = process.env.DEMO === "true";
+
 
 export default function RouteComponent() {
   const data = useLoaderData<typeof loader>()
@@ -21,7 +25,7 @@ export default function RouteComponent() {
   return (
     <StaffShell staffData={data.staffData}>
       {
-        !demo ? null : (
+        !data.demo ? <div /> : (
           <div className="bg-red-500 px-2 py-2 sm:px-2 md:py-2 lg:px-8">
             <div className="md:flex md:items-center md:justify-between">
               <div className="min-w-0 flex-1">
