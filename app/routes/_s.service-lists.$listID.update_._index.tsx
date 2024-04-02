@@ -19,7 +19,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   }
 
 
-  const actionUrl = `/service-lists/${listID}/preparing`
+  const actionUrl = `/service-lists/${listID}/preparing?index`
   const baseUrl = `/service-lists/${listID}/update`
 
   const steps: Step[] = [
