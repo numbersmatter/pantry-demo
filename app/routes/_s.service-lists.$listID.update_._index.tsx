@@ -4,7 +4,7 @@ import { db } from "~/lib/database/firestore.server";
 import ProgressPanels, { Step } from "~/components/common/progress-panels";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/shadcn/ui/card";
 import { DataTable } from "~/components/display/data-table";
-import { serviceListItemsCols } from "~/lib/database/service-lists/tables";
+import { serviceListItemsCols, serviceListItemsUpdateCol } from "~/lib/database/service-lists/tables";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import AddMenuItemDialog from "~/components/pages/service-lists/add-menu-item-dialog";
 
@@ -28,7 +28,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     { id: 'preview', name: 'Preview', to: `${baseUrl}/preview`, status: 'upcoming' },
   ];
 
-  return json({ user, serviceList, steps, baseUrl, actionUrl });
+  const serviceListItems = serviceList.service_items.map((item) => {
+    return {
+      ...item,
+      service_list_id: listID,
+    }
+  })
+
+  return json({ user, serviceList, steps, baseUrl, actionUrl, serviceListItems });
 };
 
 
@@ -53,8 +60,8 @@ export default function Route() {
           </CardDescription>
         </CardHeader>
         <DataTable
-          columns={serviceListItemsCols}
-          data={data.serviceList.service_items}
+          columns={serviceListItemsUpdateCol}
+          data={data.serviceListItems}
         />
         <CardFooter className="py-2">
           <AddMenuItemDialog actionUrl={data.actionUrl} />
