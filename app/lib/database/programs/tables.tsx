@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Program } from "./types";
 import { Link } from "@remix-run/react";
+import { SingleButtonFetcher } from "~/components/common/single-button-form";
 
 
 
@@ -25,10 +26,20 @@ export const programsOfAreaColumns: ColumnDef<Program>[] = [
     header: "Link",
     cell: ({ row }) => {
       return (
-        <Link to={`/programs/${row.original.id}`}>Link</Link>
+        <SingleButtonFetcher
+          text="View"
+          actionUrl={`/programs/${row.original.id}`}
+        >
+          <input type="hidden" name="programID" value={row.original.id} />
+          <input type="hidden" name="_action" value="goToPeriod" />
+
+        </SingleButtonFetcher>
       )
     }
   }
 ]
+
+
+
 
 

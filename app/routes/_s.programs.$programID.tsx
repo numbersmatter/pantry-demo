@@ -1,8 +1,10 @@
-import { json, type LoaderFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { json, redirect, type LoaderFunctionArgs } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { ContainerPadded } from "~/components/common/containers";
 import { HeaderTabs, SectionHeader, TabOption } from "~/components/common/header-tabs";
 import { protectedRoute } from "~/lib/auth/auth.server";
+import { db } from "~/lib/database/firestore.server";
 import { programsDb } from "~/lib/database/programs/programs-crud.server";
 
 
@@ -27,6 +29,23 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   return json({ tabs, baseUrl, program });
 };
 
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  let { user } = await protectedRoute(request);
+  const programID = params.programID ?? "programID";
+  const program = await programsDb.read(programID);
+  if (!program) {
+    throw new Response("Program not found", { status: 404 });
+  }
+  const service_period_id = await db.service_period.getLastServicePeriod(programID);
+
+  if (!service_period_id) {
+    return redirect(`/programs/${programID}/service-periods/new`);
+  }
+
+  return redirect(`/service-periods/${service_period_id}`);
+
+};
 
 
 

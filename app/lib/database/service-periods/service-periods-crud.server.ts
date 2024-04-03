@@ -87,6 +87,22 @@ const byProgramId = async (program_id: string) => {
   return snapshot.docs.map((doc) => doc.data());
 };
 
+const getLastServicePeriod = async (program_id: string) => {
+  const snapshot = await service_periods_collection()
+    .where("program_id", "==", program_id)
+    .orderBy("start_date", "desc")
+    .limit(1)
+    .get();
+
+  const dataSnaps = snapshot.docs.map((doc) => doc.data());
+
+  if (dataSnaps.length === 0) {
+    return null;
+  }
+
+  return dataSnaps[0].id;
+};
+
 export const servicePeriodsDb = {
   create,
   read,
@@ -94,4 +110,5 @@ export const servicePeriodsDb = {
   remove,
   getAll,
   byProgramId,
+  getLastServicePeriod,
 };
