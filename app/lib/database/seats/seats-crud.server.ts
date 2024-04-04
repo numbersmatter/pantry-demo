@@ -97,6 +97,18 @@ const query = async () => {
   return querySnapshot.docs.map((doc) => doc.data());
 };
 
+const readMany = async (ids: string[]) => {
+  const docs = await Promise.all(
+    ids.map((id) => seats_collection().doc(id).get())
+  );
+
+  const validDocs = docs.filter((doc) => doc.exists);
+
+  const data = validDocs.map((doc) => doc.data() as Seat);
+
+  return data;
+};
+
 export const seatsDb = {
   create,
   read,
@@ -104,4 +116,5 @@ export const seatsDb = {
   remove,
   queryByString,
   query,
+  readMany,
 };

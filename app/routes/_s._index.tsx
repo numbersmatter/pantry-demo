@@ -72,7 +72,8 @@ export default function StaffIndex() {
       <div className="prose py-2 md:py-5">
         <h1>Dashboard</h1>
       </div>
-      <div>
+      <div className="prose">
+        <h2>Drive Thru Data</h2>
         <DataCards stats={[
           { name: 'Total Families', stat: dashData.totalFamilies.toString() },
           { name: 'Total Children', stat: dashData.totalChildren.toString() },
