@@ -178,7 +178,7 @@ function InvoiceSummery({ service, familyName }: { service: ServiceTransaction, 
 }
 
 
-export function FoodBoxRequestInvoiceTable({
+export function InvoiceItemsRows({
   foodBoxOrder }: {
     foodBoxOrder: FoodBoxOrder
   }) {

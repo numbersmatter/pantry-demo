@@ -3,7 +3,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { ContainerPadded } from "~/components/common/containers";
 import { DataTable } from "~/components/display/data-table";
-import { FoodBoxRequestInvoiceTable, ServiceInvoice } from "~/components/pages/service-transactions/service-invoice";
+import { InvoiceItemsRows, ServiceInvoice } from "~/components/pages/service-transactions/service-invoice";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { familyDb } from "~/lib/database/families/family-crud.server";
 import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
@@ -40,6 +40,7 @@ const foodBoxRequest: FoodBoxOrder = {
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);
   const serviceID = params["serviceID"] ?? "serviceID";
+
 
   const service = await serviceTransactionsDb.read(serviceID);
   if (!service) {
@@ -114,7 +115,7 @@ export default function ServiceTransactionServiceIDRoute() {
         service={serviceTransaction}
         familyName={familyName}
       >
-        <FoodBoxRequestInvoiceTable foodBoxOrder={foodBoxRequest} />
+        <InvoiceItemsRows foodBoxOrder={lineItems} />
       </ServiceInvoice>
       <pre>{JSON.stringify(lineItems, null, 2)}</pre>
     </ContainerPadded>

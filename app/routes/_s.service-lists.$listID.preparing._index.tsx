@@ -18,20 +18,12 @@ import { Label } from "~/components/shadcn/ui/label"
 import { RouteError, StandardError } from "~/components/common/ErrorPages";
 import { serviceListsDb } from "~/lib/database/service-lists/service-lists-crud.server";
 import ProgressPanels, { Step } from "~/components/common/progress-panels";
-import { ServiceListProgress } from "~/components/pages/service-lists/service-list-tabs";
-import { ProgressTabsContent } from "~/components/shadcn/ui/tabs-progress";
-import { Button } from "~/components/shadcn/ui/button";
-import { FoodBoxRequestInvoiceTable } from "~/components/pages/service-transactions/service-invoice";
-import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
 import { DataTable } from "~/components/display/data-table";
 import { serviceListItemsCols } from "~/lib/database/service-lists/tables";
-import { FormDialogVer1 } from "~/components/common/form-dialog";
 import { performMutation } from "remix-forms";
 import { z } from "zod";
 import { makeDomainFunction } from "domain-functions";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
-import { seatsOfServiceList } from "~/lib/database/seats/seats-tables";
-import { seatsDb } from "~/lib/database/seats/seats-crud.server";
 import AddMenuItemDialog from "~/components/pages/service-lists/add-menu-item-dialog";
 
 const schema = z.object({
