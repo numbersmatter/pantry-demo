@@ -17,6 +17,7 @@ import { servicePeriodToDbModel } from "~/lib/database/service-periods/service-p
 import { performMutation } from "remix-forms";
 import { ServiceTransactionValue } from "~/lib/database/service-transactions/types/service-trans-model";
 import { ServiceListAdd } from "~/lib/database/service-lists/types";
+import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 
 
 const addListSchema = z.object({
@@ -54,6 +55,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   let { user } = await protectedRoute(request);
   const service_period_id = params.periodID ?? "periodID";
   const service_period = await db.service_period.read(service_period_id);
+  const baseUrl = `/service-periods/${params.periodID}`;
 
   if (!service_period) {
     throw new Error("Service period not found");
@@ -61,7 +63,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const service_lists = await db.service_lists.inPeriod(service_period_id);
 
-  return json({ service_lists });
+  return json({ service_lists, baseUrl });
 };
 
 
@@ -93,6 +95,7 @@ export default function Route() {
   const data = useLoaderData<typeof loader>();
   return (
     <div>
+      <ServicePeriodTabs baseUrl={data.baseUrl} defaultTab="service-lists" />
       <div>
         <AddList />
       </div>

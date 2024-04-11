@@ -6,6 +6,7 @@ import { Seat } from "~/lib/database/seats/types/seats-model";
 import { dollarValueConverter } from "~/lib/value-estimation/utils";
 import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
 import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
+import { Link } from "@remix-run/react";
 
 
 
@@ -27,7 +28,7 @@ export function ServiceInvoice({
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {/* Invoice summary */}
-          <InvoiceSummery service={service} familyName={familyName} />
+          <InvoiceSummery service={service} familyName={familyName} family_id={seat.family_id} />
 
           {/* Food Box Request */}
           <div className="-mx-4 px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16">
@@ -120,7 +121,7 @@ export function ServiceInvoice({
   )
 }
 
-function InvoiceSummery({ service, familyName }: { service: ServiceTransaction, familyName: string }) {
+function InvoiceSummery({ service, familyName, family_id }: { service: ServiceTransaction, familyName: string, family_id: string }) {
 
   const dollarValue = dollarValueConverter(service.value);
 
@@ -137,7 +138,7 @@ function InvoiceSummery({ service, familyName }: { service: ServiceTransaction, 
         <div className="flex-none self-end px-6 pt-4">
           <dt className="sr-only">Status</dt>
           <dd className="rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-600/20">
-            Paid
+            Received
           </dd>
         </div>
         <div className="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
@@ -169,9 +170,9 @@ function InvoiceSummery({ service, familyName }: { service: ServiceTransaction, 
         </div>
       </dl>
       <div className="mt-6 border-t border-gray-900/5 px-6 py-6">
-        <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+        <Link to={`/families/${family_id}`} className="text-sm font-semibold leading-6 text-gray-900">
           Go to family <span aria-hidden="true">&rarr;</span>
-        </a>
+        </Link>
       </div>
     </div>
   </div>;
@@ -179,15 +180,20 @@ function InvoiceSummery({ service, familyName }: { service: ServiceTransaction, 
 
 
 export function InvoiceItemsRows({
-  foodBoxOrder }: {
-    foodBoxOrder: FoodBoxOrder
+  foodBoxOrder, items }: {
+    foodBoxOrder: FoodBoxOrder,
+    items: ItemLine[]
   }) {
-  const invoiceItems = foodBoxOrder.items.map((item) => {
+  const invoiceItems = items.map((item) => {
     return {
       ...item,
       value: dollarValueConverter(item.value),
     }
   })
+
+
+
+
   return (
     <>
       {

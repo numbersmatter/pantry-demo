@@ -9,6 +9,7 @@ import { familyDb } from "~/lib/database/families/family-crud.server";
 import { FoodBoxOrder } from "~/lib/database/food-box-order/types/food-box-order-model";
 import { seatsDb } from "~/lib/database/seats/seats-crud.server";
 import { serviceTransactionsDb } from "~/lib/database/service-transactions/service-transactions-crud.server";
+import { ItemLine } from "~/lib/value-estimation/types/item-estimations";
 import { dollarValueConverter } from "~/lib/value-estimation/utils";
 
 const foodBoxRequest: FoodBoxOrder = {
@@ -101,12 +102,15 @@ export default function ServiceTransactionServiceIDRoute() {
     }
   }
 
-  const invoiceItems = lineItems.items.map((item) => {
-    return {
-      ...item,
-      value: dollarValueConverter(item.value),
-    }
-  })
+  const invoiceItems: ItemLine[] = [
+    {
+      item_id: "service_list_id",
+      item_name: service.service_type,
+      value: service.value,
+      quantity: 1,
+      type: "packed-box"
+    },
+  ]
 
   return (
     <ContainerPadded>
@@ -115,9 +119,9 @@ export default function ServiceTransactionServiceIDRoute() {
         service={serviceTransaction}
         familyName={familyName}
       >
-        <InvoiceItemsRows foodBoxOrder={lineItems} />
+        <InvoiceItemsRows foodBoxOrder={lineItems} items={invoiceItems} />
       </ServiceInvoice>
-      <pre>{JSON.stringify(lineItems, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(lineItems, null, 2)}</pre> */}
     </ContainerPadded>
   )
 }
