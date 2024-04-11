@@ -124,6 +124,7 @@ const mutation = (staff: { staff_id: string, staff_name: string }) => makeDomain
         update.transactionId,
         {
           value: update.new_value,
+          memo: `${serviceList.name} ${serviceList.id}`
         }
       )
 
@@ -162,6 +163,7 @@ const mutation = (staff: { staff_id: string, staff_name: string }) => makeDomain
         id: "",
         service_period_id: serviceList.service_period_id,
         value: transactionValue,
+        memo: `${serviceList.name} ${serviceList.id}`
       }
 
       const transaction_id = await db.service_transactions.create(transactionData);

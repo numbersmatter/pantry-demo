@@ -108,7 +108,8 @@ export default function ServiceTransactionServiceIDRoute() {
       item_name: service.service_type,
       value: service.value,
       quantity: 1,
-      type: "packed-box"
+      type: "packed-box",
+      memo: service.memo ?? service.service_type,
     },
   ]
 

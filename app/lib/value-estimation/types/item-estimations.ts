@@ -17,4 +17,5 @@ export interface ItemLine {
   quantity: number;
   value: number;
   item_id: string;
+  memo?: string;
 }

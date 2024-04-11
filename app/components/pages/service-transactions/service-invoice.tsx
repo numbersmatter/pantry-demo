@@ -204,7 +204,7 @@ export function InvoiceItemsRows({
                 {item.item_name}
               </div>
               <div className="truncate text-gray-500">
-                {item.item_name}
+                {item.memo ?? item.item_name}
               </div>
             </td>
             <td className="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">

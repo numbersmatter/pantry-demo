@@ -19,6 +19,7 @@ export interface ServiceTransaction {
   service_type: ServiceTransactionType;
   value: ServiceTransactionValue;
   service_period_id: string;
+  memo?: string;
 }
 
 export interface ServiceTransactionDbModel {
@@ -30,11 +31,12 @@ export interface ServiceTransactionDbModel {
   service_type: ServiceTransactionType;
   value: ServiceTransactionValue;
   service_period_id: string;
+  memo?: string;
 }
 
 export interface ServiceTransactionCreateDbModel {
   delivered_to: SeatId;
-
+  memo?: string;
   status: ServiceTransactionStatus;
   service_type: ServiceTransactionType;
   value: ServiceTransactionValue;
