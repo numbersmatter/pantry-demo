@@ -1,11 +1,18 @@
-import { Outlet, json, useLoaderData, useNavigate } from "@remix-run/react"
+import { Outlet, json, redirect, useLoaderData, useNavigate } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { WeeklyTabs, Tab, SelectTab } from "./tabs";
 import { useState } from "react";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const day = params.day ?? 'monday';
+  const day = params.day as string;
+  const validDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
   const id = params.id ?? 'default';
+
+
+  if (!validDays.includes(day)) {
+    throw redirect(`/demo/${id}/${validDays[0]}`)
+  };
+
 
   const dbTabs = [
     { name: 'Monday', day: 'monday', count: 10 },

@@ -42,7 +42,7 @@ export function WeeklyTabs({
 }) {
   return (
     <div>
-      <div className="">
+      <div className="sm:hidden">
         <label htmlFor="tabs" className="sr-only">
           Select a tab
         </label>
