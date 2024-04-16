@@ -36,25 +36,25 @@ const tabs = [
 
 
 export function WeeklyTabs({
-  tabs,
+  tabs, children, handleTabChange
 }: {
-  tabs: Tab[],
+  tabs: Tab[], children?: React.ReactNode, handleTabChange: (tab: Tab) => void
 }) {
   return (
     <div>
-      <div className="sm:hidden">
+      <div className="">
         <label htmlFor="tabs" className="sr-only">
           Select a tab
         </label>
-        <SelectTab tabs={tabs} />
+        {children}
       </div>
       <div className="hidden sm:block">
         <div className="border-b border-gray-200">
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
             {tabs.map((tab) => (
-              <Link
+              <button
                 key={tab.name}
-                to={tab.to}
+                onClick={() => handleTabChange(tab)}
                 className={classNames(
                   tab.current
                     ? 'border-indigo-500 text-indigo-600'
@@ -74,7 +74,7 @@ export function WeeklyTabs({
                     {tab.count}
                   </span>
                 ) : null}
-              </Link>
+              </button>
             ))}
           </nav>
         </div>
@@ -84,17 +84,14 @@ export function WeeklyTabs({
 }
 
 
-function SelectTab({
-  tabs
-}: { tabs: Tab[], }) {
-  const defaultTab = tabs.find((tab) => tab.current) ?? tabs[0];
-  const navigate = useNavigate();
-  const [selected, setSelected] = useState(defaultTab)
+export function SelectTab({
+  tabs, selected, handleTabChange
+}: {
+  tabs: Tab[],
+  selected: Tab,
+  handleTabChange: (tab: Tab) => void
+}) {
 
-  const handleTabChange = (tab: Tab) => {
-    setSelected(tab)
-    return navigate(tab.to)
-  }
 
   return (
     <Listbox value={selected} onChange={(tab) => handleTabChange(tab)}>

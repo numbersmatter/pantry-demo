@@ -1,6 +1,7 @@
-import { json, useLoaderData } from "@remix-run/react"
+import { Outlet, json, useLoaderData, useNavigate } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { WeeklyTabs, Tab } from "./tabs";
+import { WeeklyTabs, Tab, SelectTab } from "./tabs";
+import { useState } from "react";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const day = params.day ?? 'monday';
@@ -29,14 +30,27 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function Route() {
   const data = useLoaderData<typeof loader>();
-
   const defaultTab = data.tabs.find((tab) => tab.current) ?? data.tabs[0];
+  const navigate = useNavigate();
+  const [selected, setSelected] = useState<Tab>(defaultTab)
+
+  const handleTabChange = (tab: Tab) => {
+    setSelected(tab)
+    return navigate(tab.to)
+  }
+
 
 
   return (
     <>
-      <WeeklyTabs tabs={data.tabs} />
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <WeeklyTabs tabs={data.tabs} handleTabChange={handleTabChange}>
+        <SelectTab
+          tabs={data.tabs}
+          selected={selected}
+          handleTabChange={handleTabChange}
+        />
+      </WeeklyTabs>
+      <Outlet />
     </>
   )
 }
