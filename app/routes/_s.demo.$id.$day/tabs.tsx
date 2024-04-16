@@ -36,10 +36,9 @@ const tabs = [
 
 
 export function WeeklyTabs({
-  tabs, defaultTab
+  tabs,
 }: {
   tabs: Tab[],
-  defaultTab: Tab
 }) {
   return (
     <div>
@@ -47,7 +46,7 @@ export function WeeklyTabs({
         <label htmlFor="tabs" className="sr-only">
           Select a tab
         </label>
-        <SelectTab tabs={tabs} defaultTab={defaultTab} />
+        <SelectTab tabs={tabs} />
       </div>
       <div className="hidden sm:block">
         <div className="border-b border-gray-200">
@@ -86,8 +85,9 @@ export function WeeklyTabs({
 
 
 function SelectTab({
-  tabs, defaultTab,
-}: { tabs: Tab[], defaultTab: Tab, }) {
+  tabs
+}: { tabs: Tab[], }) {
+  const defaultTab = tabs.find((tab) => tab.current) ?? tabs[0];
   const navigate = useNavigate();
   const [selected, setSelected] = useState(defaultTab)
 
