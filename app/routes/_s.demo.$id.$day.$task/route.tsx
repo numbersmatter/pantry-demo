@@ -1,6 +1,7 @@
 import { json, useLoaderData } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { ProgressSteps, Step } from "./progress";
+import { TaskCard } from "./task-card";
 
 
 
@@ -22,7 +23,8 @@ export default function TaskRoute() {
   return (
     <div>
       <ProgressSteps steps={data.steps} />
-      <h1>Task Route</h1>
+      <TaskCard task={{ title: 'Task 1', description: 'This is the first task' }}>
+      </TaskCard>
     </div>
   )
 }
