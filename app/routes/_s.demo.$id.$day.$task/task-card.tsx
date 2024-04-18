@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 
 export type Task = {
-  title: string,
+  name: string,
   description: string,
 }
 
@@ -13,7 +13,7 @@ export function TaskCard({ task, children }: { task: Task, children?: React.Reac
     <Card>
       <CardHeader>
         <CardTitle>
-          {task.title}
+          {task.name}
         </CardTitle>
         <CardDescription>
           {task.description}

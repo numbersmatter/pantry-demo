@@ -1,29 +1,55 @@
-import { json, useLoaderData } from "@remix-run/react"
+import { json, useLoaderData, useMatches } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { ProgressSteps, Step } from "./progress";
 import { TaskCard } from "./task-card";
+import { WeekData } from "~/lib/demo/demo-data";
+import { Vstep } from "../_s.demo.$id.$day._index/steps";
 
 
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const day = params.day as string;
+  const task = params.task as string;
 
-  const steps: Step[] = [
-    { step_id: "1", name: 'Step 1', to: '#', status: 'complete' },
-    { step_id: "2", name: 'Step 2', to: '#', status: 'current' },
-    { step_id: "3", name: 'Step 3', to: '#', status: 'upcoming' },
-    { step_id: "4", name: 'Step 4', to: '#', status: 'upcoming' },
-  ];
-  return json({ steps });
+  const validDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+  if (!validDays.includes(day)) {
+    throw new Error(`Invalid day ${day}`);
+  }
+
+  const workDay = day as keyof WeekData['taskData']
+
+
+  return json({ workDay, task });
 };
 
 
 export default function TaskRoute() {
   const data = useLoaderData<typeof loader>();
+
+  const matches = useMatches();
+  const dataRoute = "routes/_s.demo.$id"
+  const weekPlan = matches.find(m => m.id === dataRoute)?.data as WeekData
+
+  const daySteps: Vstep[] = weekPlan.taskData[data.workDay].map((task, index) => {
+    return {
+      name: task.title,
+      description: task.description,
+      to: (index + 1).toString(),
+      status: "upcoming",
+    }
+  })
+
+  const currentTask = daySteps.find((task) => task.to === data.task) ?? { name: 'Task 1', description: 'This is the first task' }
+
+  const currentTaskIndex = daySteps.findIndex((task) => task.to === data.task)
+
   return (
-    <div>
-      <ProgressSteps steps={data.steps} />
-      <TaskCard task={{ title: 'Task 1', description: 'This is the first task' }}>
+    <div className="py-4">
+      <TaskCard
+        task={currentTask}
+      >
+
       </TaskCard>
     </div>
   )
