@@ -17,9 +17,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const dayTasks = demoData
 
   const dbTabs = [
-    { name: 'Monday', day: 'monday', count: 10 },
-    { name: 'Tuesday', day: 'tuesday', count: 6 },
-    { name: 'Wednesday', day: 'wednesday', count: 4 },
+    { name: 'Monday', day: 'monday', count: 0 },
+    { name: 'Tuesday', day: 'tuesday', count: 0 },
+    { name: 'Wednesday', day: 'wednesday', count: 0 },
     { name: 'Thursday', day: 'thursday', count: 0 },
     { name: 'Friday', day: 'friday', count: 0 },
   ];
@@ -64,7 +64,6 @@ export default function Route() {
         />
       </WeeklyTabs>
       <Outlet />
-
     </>
   )
 }

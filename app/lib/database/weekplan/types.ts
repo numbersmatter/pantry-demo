@@ -1,3 +1,17 @@
+export const validDays = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+];
+
+export type ValidDay = (typeof validDays)[number];
+
+interface TaskStatus {
+  [k: string]: boolean;
+}
+
 export interface DayTask {
   title: string;
   description: string;
@@ -14,6 +28,7 @@ export interface WeekTaskData {
 export interface WeekPlanBase {
   title: string;
   taskData: WeekTaskData;
+  taskStatus: TaskStatus;
 }
 
 export interface WeekPlanDBModel extends WeekPlanBase {}

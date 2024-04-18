@@ -42,12 +42,7 @@ export function WeeklyTabs({
 }) {
   return (
     <div>
-      <div className="sm:hidden">
-        <label htmlFor="tabs" className="sr-only">
-          Select a tab
-        </label>
-        {children}
-      </div>
+      {children}
       <div className="hidden sm:block">
         <div className="border-b border-gray-200">
           <nav className="-mb-px flex space-x-8" aria-label="Tabs">
@@ -79,7 +74,7 @@ export function WeeklyTabs({
           </nav>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 
@@ -96,7 +91,7 @@ export function SelectTab({
   return (
     <div className="sm:hidden">
       <label htmlFor="weekday" className="sr-only">
-        Select a tab
+        Select A tab
       </label>
       <Listbox aria-label="weekday" value={selected} onChange={(tab) => handleTabChange(tab)}>
         <div className="relative mt-1">

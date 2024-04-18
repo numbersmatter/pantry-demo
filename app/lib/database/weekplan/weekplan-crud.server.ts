@@ -1,4 +1,9 @@
-import { FirestoreDataConverter, getFirestore } from "firebase-admin/firestore";
+import {
+  DocumentData,
+  FirestoreDataConverter,
+  WriteResult,
+  getFirestore,
+} from "firebase-admin/firestore";
 import { WeekPlan, WeekPlanBase, WeekPlanDBModel } from "./types";
 import { db_paths } from "../firestore.server";
 
@@ -41,7 +46,22 @@ const createWeekPlan = async (weekplan: WeekPlanBase): Promise<WeekPlan> => {
   return data;
 };
 
+const updateWeekPlan = async ({
+  weekplanId,
+  data,
+}: {
+  weekplanId: string;
+  data: DocumentData;
+}): Promise<WriteResult> => {
+  const colRef = weekplanCollection();
+  const docRef = colRef.doc(weekplanId);
+  const write = await docRef.update(data);
+
+  return write;
+};
+
 export const weekPlanDb = {
   read: readWeekPlan,
   create: createWeekPlan,
+  update: updateWeekPlan,
 };

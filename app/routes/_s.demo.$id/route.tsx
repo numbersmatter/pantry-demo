@@ -1,10 +1,6 @@
 import { Outlet, json, useLoaderData } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import WeeklyPanel from "./panels";
-import WeeklyTabs from "./tabs";
-import DailySteps from "./steps";
 import { HeaderText } from "./header";
-import { demoData } from "~/lib/demo/demo-data";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { db } from "~/lib/database/firestore.server";
 
@@ -17,6 +13,24 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!weekplan) {
     throw new Error("Weekplan not found",);
   }
+
+
+  const dbTabs = [
+    { name: 'Monday', day: 'monday', count: 0 },
+    { name: 'Tuesday', day: 'tuesday', count: 0 },
+    { name: 'Wednesday', day: 'wednesday', count: 0 },
+    { name: 'Thursday', day: 'thursday', count: 0 },
+    { name: 'Friday', day: 'friday', count: 0 },
+  ];
+
+  const tabs = dbTabs.map((tab) => {
+    return {
+      ...tab,
+      // current: tab.day === day,
+      to: `/demo/${weekplanId}/${tab.day}`,
+    }
+  });
+
 
   const taskData = weekplan.taskData;
   const title = weekplan.title;

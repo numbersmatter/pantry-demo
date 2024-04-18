@@ -52,7 +52,6 @@ export default function Route() {
   return (
     <div className="mx-auto py-5 px-1 w-80 md:w-96">
       <VerticalSteps steps={daySteps} />
-      <pre>{JSON.stringify(weekPlan, null, 2)}</pre>
     </div>
   )
 
