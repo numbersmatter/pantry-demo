@@ -4,11 +4,13 @@ import WeeklyPanel from "./panels";
 import WeeklyTabs from "./tabs";
 import DailySteps from "./steps";
 import { HeaderText } from "./header";
+import { demoData } from "~/lib/demo/demo-data";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
+  const taskData = demoData;
   const title = 'April 15-19, 2024 Food Box Program';
-  return json({ title });
+  return json({ title, taskData });
 };
 
 

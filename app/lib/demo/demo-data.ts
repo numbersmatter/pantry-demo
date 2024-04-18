@@ -1,4 +1,22 @@
-const mondayTasks = [
+export interface DayTask {
+  title: string;
+  description: string;
+  button_text: string;
+}
+export interface WeekTaskData {
+  monday: DayTask[];
+  tuesday: DayTask[];
+  wednesday: DayTask[];
+  thursday: DayTask[];
+  friday: DayTask[];
+}
+
+export interface WeekData {
+  title: string;
+  taskData: WeekTaskData;
+}
+
+const mondayTasks: DayTask[] = [
   {
     title: "Checkout Truck",
     description: "2:30 pm appointment",
@@ -128,7 +146,7 @@ const fridayTasks = [
   },
 ];
 
-export const demoData = {
+export const demoData: WeekTaskData = {
   monday: mondayTasks,
   tuesday: tuesdayTasks,
   wednesday: wednesdayTasks,
