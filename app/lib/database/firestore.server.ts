@@ -11,6 +11,7 @@ import { seatsDb } from "./seats/seats-crud.server";
 import { serviceListsDb } from "./service-lists/service-lists-crud.server";
 import { pendingActionsDb } from "./service-lists/pending-crud.server";
 import { serviceTransactionsDb } from "./service-transactions/service-transactions-crud.server";
+import { weekPlanDb } from "./weekplan/weekplan-crud.server";
 
 // helper function to firestore data to typescript
 const converter = <T>() => ({
@@ -51,6 +52,7 @@ export const db_paths = {
   staff: `${basePath}staff`,
   drive_thru: `${basePath}drive_thru`,
   pending: `${basePath}pending`,
+  weekplan: `${basePath}weekplan`,
 };
 
 export const db = {
@@ -65,4 +67,5 @@ export const db = {
   service_lists: serviceListsDb,
   pending: pendingActionsDb,
   service_transactions: serviceTransactionsDb,
+  weekplan: weekPlanDb,
 };

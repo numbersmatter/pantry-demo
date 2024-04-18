@@ -4,6 +4,9 @@ import { ProgressSteps, Step } from "./progress";
 import { TaskCard } from "./task-card";
 import { WeekData } from "~/lib/demo/demo-data";
 import { Vstep } from "../_s.demo.$id.$day._index/steps";
+import { TaskDrawer } from "./taskdrawer";
+import { useState } from "react";
+import { Button } from "~/components/shadcn/ui/button";
 
 
 
@@ -26,6 +29,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function TaskRoute() {
   const data = useLoaderData<typeof loader>();
+  const [open, setOpen] = useState(false)
 
   const matches = useMatches();
   const dataRoute = "routes/_s.demo.$id"
@@ -49,8 +53,16 @@ export default function TaskRoute() {
       <TaskCard
         task={currentTask}
       >
-
+        <Button onClick={() => setOpen(true)}>Edit</Button>
       </TaskCard>
+      <TaskDrawer open={open} setOpen={setOpen}>
+        <div className="p-4">
+          <h2 className="text-lg font-bold">Edit Task</h2>
+          <p className="text-sm">Make changes to your task here. Click save when you're done.</p>
+          <input type="text" placeholder="Task Name" className="input" />
+          <textarea placeholder="Task Description" className="input"></textarea>
+        </div>
+      </TaskDrawer>
     </div>
   )
 }

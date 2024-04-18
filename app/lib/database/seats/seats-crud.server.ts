@@ -9,7 +9,6 @@ import {
 } from "firebase-admin/firestore";
 import { Seat, SeatAdd, SeatDbModel } from "./types/seats-model";
 import { db_paths } from "../firestore.server";
-import { Feather } from "lucide-react";
 
 // function toFirestore
 

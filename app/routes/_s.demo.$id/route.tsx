@@ -5,11 +5,21 @@ import WeeklyTabs from "./tabs";
 import DailySteps from "./steps";
 import { HeaderText } from "./header";
 import { demoData } from "~/lib/demo/demo-data";
+import { protectedRoute } from "~/lib/auth/auth.server";
+import { db } from "~/lib/database/firestore.server";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  let { user } = await protectedRoute(request);
+  const weekplanId = params["id"] as string;
 
-  const taskData = demoData;
-  const title = 'April 15-19, 2024 Food Box Program';
+  const weekplan = await db.weekplan.read(weekplanId);
+
+  if (!weekplan) {
+    throw new Error("Weekplan not found",);
+  }
+
+  const taskData = weekplan.taskData;
+  const title = weekplan.title;
   return json({ title, taskData });
 };
 
