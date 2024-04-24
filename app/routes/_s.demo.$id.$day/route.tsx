@@ -14,7 +14,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     throw redirect(`/demo/${id}/${validDays[0]}`)
   };
 
-  const dayTasks = demoData
+  const dayTasks = demoData[day as keyof typeof demoData];
 
   const dbTabs = [
     { name: 'Monday', day: 'monday', count: 0 },
@@ -32,7 +32,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     }
   });
 
-  return json({ tabs });
+  return json({ tabs, dayTasks });
 };
 
 

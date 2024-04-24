@@ -2,7 +2,7 @@ import { json, useLoaderData, useMatches } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import VerticalSteps, { Vstep } from "./steps";
 import type { loader as parentData } from "~/routes/_s.demo.$id/route"
-import { WeekData } from "~/lib/demo/demo-data";
+import { DayTask, WeekData } from "~/lib/demo/demo-data";
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -38,13 +38,17 @@ export default function Route() {
   const { steps, workDay } = useLoaderData<typeof loader>();
   const matches = useMatches();
   const dataRoute = "routes/_s.demo.$id"
+  const dayTaskRoute = "routes/_s.demo.$id.$day"
+
   const weekPlan = matches.find(m => m.id === dataRoute)?.data as WeekData
 
-  const daySteps: Vstep[] = weekPlan.taskData[workDay].map((task, index) => {
+  // @ts-ignore
+  const dayTasks = matches.find(m => m.id === dayTaskRoute)?.data.dayTasks as DayTask[]
+  const daySteps: Vstep[] = dayTasks.map((task, index) => {
     return {
       name: task.title,
       description: task.description,
-      to: (index + 1).toString(),
+      to: task.id,
       status: "upcoming",
     }
   })
@@ -52,6 +56,7 @@ export default function Route() {
   return (
     <div className="mx-auto py-5 px-1 w-80 md:w-96">
       <VerticalSteps steps={daySteps} />
+      <pre>{JSON.stringify(dayTasks, null, 2)}</pre>
     </div>
   )
 

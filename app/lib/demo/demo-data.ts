@@ -31,10 +31,10 @@ const mondayTasks: DayTask[] = [
     id: "drive-second-harvest",
   },
   {
-    title: "Accept Food Pallets",
+    title: "Accept Food Pallets Order",
     description: "Sign for pallets",
     button_text: "Next",
-    id: "accept-food-pallets",
+    id: "accept-order",
   },
   {
     title: "Drive to CIS-T",
