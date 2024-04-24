@@ -1,4 +1,4 @@
-import { json, useLoaderData, useMatches } from "@remix-run/react"
+import { Form, json, useLoaderData, useMatches } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { ProgressSteps, Step } from "./progress";
 import { TaskCard } from "./task-card";
@@ -7,6 +7,7 @@ import { Vstep } from "../_s.demo.$id.$day._index/steps";
 import { TaskDrawer } from "./taskdrawer";
 import { useState } from "react";
 import { Button } from "~/components/shadcn/ui/button";
+import { FormNumberField } from "~/components/forms/number-field";
 
 
 
@@ -47,21 +48,34 @@ export default function TaskRoute() {
   const currentTask = daySteps.find((task) => task.to === data.task) ?? { name: 'Task 1', description: 'This is the first task' }
 
   const currentTaskIndex = daySteps.findIndex((task) => task.to === data.task)
+  const truckText = "On Mondays you will need to pickup our weekly order of food from Second Harvest Food Bank. The address is 1234 Main St. and you will need to be there by 2:30pm. The Executive Director will have the keys for the truck in their office. When you have received the keys enter the Odometer reading in the form to complete the task."
 
   return (
     <div className="py-4">
       <TaskCard
         task={currentTask}
       >
-        <Button onClick={() => setOpen(true)}>Edit</Button>
-      </TaskCard>
-      <TaskDrawer open={open} setOpen={setOpen}>
-        <div className="p-4">
-          <h2 className="text-lg font-bold">Edit Task</h2>
-          <p className="text-sm">Make changes to your task here. Click save when you're done.</p>
-          <input type="text" placeholder="Task Name" className="input" />
-          <textarea placeholder="Task Description" className="input"></textarea>
+        <p className="prose text-slate-600">
+          {truckText}
+        </p>
+        <div className="mt-4">
+          <Button variant={"secondary"} onClick={() => setOpen(true)}>
+            Enter Odometer
+          </Button>
         </div>
+      </TaskCard>
+      <TaskDrawer
+        open={open}
+        setOpen={setOpen}
+        title="Odometer Reading"
+        description="Enter the odometer reading for the truck here."
+      >
+        <Form method="post">
+          <FormNumberField label="Odometer Reading" id="odometer" />
+          <div className="py-3 flex justify-end">
+            <Button type="submit">Submit</Button>
+          </div>
+        </Form>
       </TaskDrawer>
     </div>
   )
