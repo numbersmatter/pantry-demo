@@ -1,10 +1,36 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { json, useLoaderData } from "@remix-run/react"
+import { Form, Link, json, useLoaderData } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { db } from "~/lib/database/firestore.server";
 import { createWeekStatus } from "~/lib/database/weekplan/domain-funcs";
 import { SingleButtonForm } from "~/components/common/single-button-form";
+import { makeDomainFunction } from "domain-functions";
+import { demoData } from "~/lib/demo/demo-data";
+import { z } from "zod";
+import { performMutation } from "remix-forms";
+import { Button } from "~/components/shadcn/ui/button";
+
+const setDemoSchema = z.object({
+  _action: z.literal("setDemoData"),
+})
+
+const setDemoData = (weekplanId: string) => makeDomainFunction(setDemoSchema)(
+  async (input) => {
+    const taskData = demoData;
+
+    const writeTaskData = await db.weekplan.update({
+      weekplanId,
+      data: {
+        taskData,
+        taskStatus: {},
+      }
+    });
+
+    return writeTaskData;
+
+  }
+)
 
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -16,23 +42,22 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     throw new Error("Weekplan not found");
   };
 
-  const taskData = weekplan.taskData;
+  const cloneRequest = request.clone();
+  const formData = await cloneRequest.formData();
+  const action = formData.get('_action') as string;
 
-  const statusMap = new Map<string, boolean>();
+  if (action === 'setDemoData') {
+    const result = await performMutation({
+      request,
+      schema: setDemoSchema,
+      mutation: setDemoData(weekplanId),
+    });
 
-  const statusObject = createWeekStatus(taskData);
+    return json(result);
 
-  const updateData = {
-    taskStatus: statusObject
   }
 
-  await db.weekplan.update({
-    weekplanId: weekplan.id,
-    data: updateData
-  });
-
-
-  return json({});
+  return json({ success: false });
 };
 
 
@@ -49,11 +74,17 @@ export default function Route() {
   const { } = useLoaderData<typeof loader>();
 
   return (
-    <div>
-      <h1>Route</h1>
-      <SingleButtonForm text="Submit" >
-        <input readOnly hidden name="_action" value="update" />
-      </SingleButtonForm>
+    <div className="flex-col flex gap-5">
+      <Link to="monday">
+        Start Monday
+      </Link>
+
+      <Form method="post">
+        <Button type="submit" variant={"destructive"}>
+          Reset Data
+        </Button>
+        <input type="hidden" name="_action" value="setDemoData" />
+      </Form>
     </div>
   )
 

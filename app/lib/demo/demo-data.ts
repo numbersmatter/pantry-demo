@@ -3,6 +3,7 @@ export interface DayTask {
   description: string;
   button_text: string;
   id: string;
+  status?: boolean;
 }
 export interface WeekTaskData {
   monday: DayTask[];

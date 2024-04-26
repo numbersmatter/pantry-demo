@@ -1,14 +1,15 @@
-import { Form, json, useLoaderData, useMatches, useParams } from "@remix-run/react"
+import type { ActionFunctionArgs } from "@remix-run/node";
+import { Form, json, redirect, useLoaderData, useMatches, useParams } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import { ProgressSteps, Step } from "./progress";
-import { TaskCard } from "./task-card";
 import { WeekData } from "~/lib/demo/demo-data";
-import { Vstep } from "../_s.demo.$id.$day._index/steps";
-import { TaskDrawer } from "./taskdrawer";
-import { useState } from "react";
-import { Button } from "~/components/shadcn/ui/button";
-import { FormNumberField } from "~/components/forms/number-field";
+
 import { DayTasks } from "./day-tasks";
+import { protectedRoute } from "~/lib/auth/auth.server";
+import { db } from "~/lib/database/firestore.server";
+import { performMutation } from "remix-forms";
+import { SetTaskStatusSchema, setTaskStatus } from "./domain-funcs";
+
+
 
 
 
@@ -24,9 +25,45 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const workDay = day as keyof WeekData['taskData']
 
-
   return json({ workDay, task });
 };
+
+
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  await protectedRoute(request);
+  const day = params.day as string;
+  const weekPlanId = params.id as string;
+  const taskId = params.task as string;
+  const weekPlanDoc = await db.weekplan.read(weekPlanId);
+
+  if (!weekPlanDoc) {
+    throw new Error("Weekplan not found");
+  }
+
+  const cloneRequest = request.clone();
+  const formData = await cloneRequest.formData();
+  const action = formData.get('_action') as string;
+
+  if (action === 'setTaskStatus') {
+    const result = await performMutation({
+      request,
+      schema: SetTaskStatusSchema,
+      mutation: setTaskStatus(weekPlanId, taskId, true),
+    })
+    if (!result.success) {
+      return json(result)
+    }
+
+    const newUrl = `/demo/${weekPlanId}/${day}`;
+    return redirect(newUrl);
+
+  }
+
+
+
+  return json({ success: false });
+};
+
 
 
 export default function TaskRoute() {

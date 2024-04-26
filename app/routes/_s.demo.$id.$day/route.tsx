@@ -3,18 +3,35 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
 import { WeeklyTabs, Tab, SelectTab } from "./tabs";
 import { useState } from "react";
 import { demoData } from "~/lib/demo/demo-data";
+import { protectedRoute } from "~/lib/auth/auth.server";
+import { db } from "~/lib/database/firestore.server";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const day = params.day as string;
-  const validDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+  await protectedRoute(request);
   const id = params.id ?? 'default';
 
+  const day = params.day as string;
+  const weekPlanId = params.id as string;
+  const weekPlanDoc = await db.weekplan.read(weekPlanId);
+
+  if (!weekPlanDoc) {
+    throw new Error("Weekplan not found");
+  }
+
+  const validDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
 
   if (!validDays.includes(day)) {
     throw redirect(`/demo/${id}/${validDays[0]}`)
   };
 
-  const dayTasks = demoData[day as keyof typeof demoData];
+  const taskStatus = weekPlanDoc.taskStatus;
+
+  const dayTasks = weekPlanDoc.taskData[day as keyof typeof weekPlanDoc.taskData].map((task) => {
+    return {
+      ...task,
+      status: taskStatus[task.id] ?? false,
+    }
+  });
 
   const dbTabs = [
     { name: 'Monday', day: 'monday', count: 0 },

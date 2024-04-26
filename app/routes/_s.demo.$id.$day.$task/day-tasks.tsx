@@ -1,7 +1,7 @@
 import { Button } from "~/components/shadcn/ui/button";
 import { TaskCard } from "./task-card";
 import { TaskDrawer } from "./taskdrawer";
-import { Form } from "@remix-run/react";
+import { Form, useFetcher } from "@remix-run/react";
 import { FormNumberField } from "~/components/forms/number-field";
 import { useRef, useState } from "react";
 import { demoData } from "~/lib/demo/demo-data";
@@ -69,6 +69,20 @@ function DriveSecondHarvest() {
   const [open, setOpen] = useState(false)
   const [driveStatus, setDriveStatus] = useState<DriveStatus>("not-started")
 
+  const setStatusFetcher = useFetcher();
+
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+    setDriveStatus("completed")
+  }
+
 
   const task = {
     name: "Drive to Second Harvest Food Bank",
@@ -114,7 +128,9 @@ function DriveSecondHarvest() {
           </div>
         </CardContent>
         <CardFooter className="grid grid-cols-1 gap-2">
-          <Button>Mark Complete</Button>
+          <Button type="button" onClick={handleMarkComplete}>
+            Mark Complete
+          </Button>
           <Button variant={"destructive"} onClick={() => setOpen(true)}>
             Report Problem
           </Button>
@@ -153,6 +169,19 @@ function DriveSecondHarvest() {
 function DriveCisT() {
   const [open, setOpen] = useState(false)
   const [driveStatus, setDriveStatus] = useState<DriveStatus>("not-started")
+  const setStatusFetcher = useFetcher();
+
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+    setDriveStatus("completed")
+  }
 
 
   const task = {
@@ -199,7 +228,9 @@ function DriveCisT() {
           </div>
         </CardContent>
         <CardFooter className="grid grid-cols-1 gap-2">
-          <Button>Mark Complete</Button>
+          <Button type="button" onClick={handleMarkComplete}>
+            Mark Complete
+          </Button>
           <Button variant={"destructive"} onClick={() => setOpen(true)}>
             Report Problem
           </Button>
@@ -244,6 +275,18 @@ function AcceptOrder() {
     name: "Accept Order",
     description: "Signing for pallets and inspecting order."
   }
+  const setStatusFetcher = useFetcher();
+
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
 
   const explainText = "When you arrive at Second Harvest Food Bank you will need to sign for the pallets and inspect the order. After signing for the order use your phone to take a picture of the order and upload it here."
 
@@ -280,7 +323,9 @@ function AcceptOrder() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
         <Button variant={"destructive"} onClick={() => setOpen(true)}>
           Report Problem
         </Button>
@@ -320,6 +365,17 @@ function AcceptOrder() {
 
 function OffloadColdPallets() {
   const [open, setOpen] = useState(false)
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
   const task = {
     name: "Storge Cold Pallets",
     description: "Any frozen or refrigerated items moved to cold storage."
@@ -347,7 +403,9 @@ function OffloadColdPallets() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
         <Button variant={"destructive"} onClick={() => setOpen(true)}>
           Report Problem
         </Button>
@@ -384,6 +442,18 @@ function OffloadColdPallets() {
 };
 function OffloadToStagingArea() {
   const [open, setOpen] = useState(false)
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Offload Dry Goods",
     description: "Move dry goods to the staging area."
@@ -411,7 +481,9 @@ function OffloadToStagingArea() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>
@@ -419,6 +491,18 @@ function OffloadToStagingArea() {
 };
 function MoveToStorage() {
   const [open, setOpen] = useState(false)
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Move to Storage",
     description: "Move dry goods into their storage area."
@@ -446,7 +530,9 @@ function MoveToStorage() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>
@@ -454,6 +540,18 @@ function MoveToStorage() {
 };
 function MessageFamilies() {
   const [open, setOpen] = useState(false)
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Send Message to Families",
     description: "Allows families to reserve a time for food pickup."
@@ -481,7 +579,9 @@ function MessageFamilies() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>
@@ -489,6 +589,18 @@ function MessageFamilies() {
 };
 function PrepareInventory() {
   const [open, setOpen] = useState(false)
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Prepare Inventory",
     description: "Time permitting do inventory of possible items."
@@ -516,7 +628,9 @@ function PrepareInventory() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>
@@ -524,6 +638,18 @@ function PrepareInventory() {
 };
 function PlanServiceMenu() {
   const [open, setOpen] = useState(false)
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Plan Service Menu",
     description: "The menu of items that will be sent in each box."
@@ -551,14 +677,27 @@ function PlanServiceMenu() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
-
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
       </CardFooter>
     </Card>
   </div>
 };
 function PlaceOrder() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Order from Second Harvest",
     description: "Place next week's order."
@@ -586,14 +725,27 @@ function PlaceOrder() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
-
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
       </CardFooter>
     </Card>
   </div>
 };
 function ReserveTruck() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Reserve Truck",
     description: "Reserve truck for following week."
@@ -621,14 +773,27 @@ function ReserveTruck() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
-
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
       </CardFooter>
     </Card>
   </div>
 };
 function PrepareColdItems() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Prep Cold Items",
     description: "Prepare Cold Food Items."
@@ -656,14 +821,27 @@ function PrepareColdItems() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
-
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
       </CardFooter>
     </Card>
   </div>
 };
 function StageDryGoods() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Stage Dry Goods",
     description: "Move non-perishable items to staging area."
@@ -691,14 +869,27 @@ function StageDryGoods() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
-
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
       </CardFooter>
     </Card>
   </div>
 };
 function PrepareInPersonPickup() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Prepare In-Person Pickup",
     description: "Build boxes for in-person pickup."
@@ -726,14 +917,27 @@ function PrepareInPersonPickup() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
-
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
       </CardFooter>
     </Card>
   </div>
 };
 function BuildDeliveryBoxes() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Build Delivery Boxes",
     description: "Boxes for the DoorDash orders."
@@ -761,14 +965,28 @@ function BuildDeliveryBoxes() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>
   </div>
 };
 function TakeSamplePicture() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Take Sample Picture",
     description: "Take a picture of the box items."
@@ -796,14 +1014,28 @@ function TakeSamplePicture() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>
   </div>
 };
 function SealDeliveryBoxes() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Seal Boxes",
     description: "Add frozen items and seal boxes."
@@ -831,14 +1063,28 @@ function SealDeliveryBoxes() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>
   </div>
 };
 function RequestDoorDash() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Request DoorDash",
     description: "Send your request to DoorDash."
@@ -866,14 +1112,28 @@ function RequestDoorDash() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>
   </div>
 };
 function LoadDasherTrolley() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Load Box Trollies",
     description: "Prepare boxes for each dasher."
@@ -901,14 +1161,28 @@ function LoadDasherTrolley() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>
   </div>
 };
 function MeetDasher() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const setStatusFetcher = useFetcher();
+  const handleMarkComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "complete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
+  }
+
   const task = {
     name: "Meet Dashers",
     description: "Meet with the DoorDash drivers."
@@ -936,7 +1210,9 @@ function MeetDasher() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button>Mark Complete</Button>
+        <Button type="button" onClick={handleMarkComplete}>
+          Mark Complete
+        </Button>
 
       </CardFooter>
     </Card>

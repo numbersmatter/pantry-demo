@@ -16,6 +16,7 @@ export interface DayTask {
   title: string;
   description: string;
   button_text: string;
+  id: string;
 }
 export interface WeekTaskData {
   monday: DayTask[];

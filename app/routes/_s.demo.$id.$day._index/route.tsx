@@ -1,8 +1,16 @@
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, useLoaderData, useMatches } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import VerticalSteps, { Vstep } from "./steps";
 import type { loader as parentData } from "~/routes/_s.demo.$id/route"
-import { DayTask, WeekData } from "~/lib/demo/demo-data";
+import { DayTask, WeekData, demoData } from "~/lib/demo/demo-data";
+import { protectedRoute } from "~/lib/auth/auth.server";
+import { db } from "~/lib/database/firestore.server";
+import { makeDomainFunction } from "domain-functions";
+import { z } from "zod";
+import { performMutation } from "remix-forms";
+import { SingleButtonForm } from "~/components/common/single-button-form";
+
 
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
@@ -32,6 +40,27 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 };
 
 
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  await protectedRoute(request);
+  const day = params.day as string;
+  const weekPlanId = params.id as string;
+  const weekPlanDoc = await db.weekplan.read(weekPlanId);
+
+  if (!weekPlanDoc) {
+    throw new Error("Weekplan not found");
+  }
+
+
+
+
+
+
+
+
+  return json({ success: false });
+};
+
+
 
 
 export default function Route() {
@@ -49,13 +78,14 @@ export default function Route() {
       name: task.title,
       description: task.description,
       to: task.id,
-      status: "upcoming",
+      status: task.status ? 'complete' : 'upcoming',
     }
   })
 
   return (
     <div className="mx-auto py-5 px-1 w-80 md:w-96">
       <VerticalSteps steps={daySteps} />
+
       <pre>{JSON.stringify(dayTasks, null, 2)}</pre>
     </div>
   )
