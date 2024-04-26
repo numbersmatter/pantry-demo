@@ -76,10 +76,10 @@ const tuesdayTasks: DayTask[] = [
     id: "send-message",
   },
   {
-    title: "Do Inventory",
+    title: "Prepare Inventory",
     description: "Time permitting do inventory.",
     button_text: "Next",
-    id: "do-inventory",
+    id: "prepare-inventory",
   },
   {
     title: "Plan Menu Items",
@@ -136,13 +136,13 @@ const fridayTasks: DayTask[] = [
     title: "Take Sample Photo",
     description: "Take a photo of items.",
     button_text: "Next",
-    id: "take-sample-photo",
+    id: "take-box-photo",
   },
   {
     title: "Prepare Delivery Orders",
     description: "Final Prep for delivery.",
     button_text: "Next",
-    id: "prepare-delivery-orders",
+    id: "seal-boxes",
   },
   {
     title: "Request DoorDash",
@@ -154,7 +154,13 @@ const fridayTasks: DayTask[] = [
     title: "Prepare Dasher Orders",
     description: "Load trollies for delivery.",
     button_text: "Next",
-    id: "prepare-dasher-orders",
+    id: "load-trollies",
+  },
+  {
+    title: "Meet Dashers",
+    description: "Meet DoorDash Drivers.",
+    button_text: "Next",
+    id: "meet-dashers",
   },
 ];
 

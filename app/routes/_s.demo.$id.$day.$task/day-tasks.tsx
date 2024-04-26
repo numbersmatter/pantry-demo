@@ -382,6 +382,566 @@ function OffloadColdPallets() {
     </Drawer>
   </div>
 };
+function OffloadToStagingArea() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Offload Dry Goods",
+    description: "Move dry goods to the staging area."
+  }
+
+  const explainText = "We never know exactly what we will receive from Second Harvest Food Bank. The dry goods will need to be moved to the staging area for sorting and distribution later."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function MoveToStorage() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Move to Storage",
+    description: "Move dry goods into their storage area."
+  }
+
+  const explainText = "Space is always at a premier in our storage area. We have a couple of general categories for dry goods: canned goods, prepared boxes,  cereals and breakfast items."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function MessageFamilies() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Send Message to Families",
+    description: "Allows families to reserve a time for food pickup."
+  }
+
+  const explainText = "We do not have the resources to deliver all food boxes via DoorDash. For families not on DoorDash delivery we send them a message telling them how to reserve a time to pickup their box."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function PrepareInventory() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Prepare Inventory",
+    description: "Time permitting do inventory of possible items."
+  }
+
+  const explainText = "Inventory is done solely for the purposes of filling out this weeks order requests. We do not have the resources to do a full inventory of all items. On DoorDash only weeks we need to have about 70 boxes of food prepared. On Drive-thru weeks we need about 150 boxes of food prepared."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function PlanServiceMenu() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Plan Service Menu",
+    description: "The menu of items that will be sent in each box."
+  }
+
+  const explainText = "We try to have roughly similar items in each box. Our main limitation is this goal is what we receive from Second Harvest Food Bank. We don't always have 60 of one exact item in each box. So we try to substitute with similar items when necessary."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function PlaceOrder() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Order from Second Harvest",
+    description: "Place next week's order."
+  }
+
+  const explainText = "We place a weekly order from Second Harvest Food Bank. This order is placed on Tuesday for pickup the following Monday."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function ReserveTruck() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Reserve Truck",
+    description: "Reserve truck for following week."
+  }
+
+  const explainText = "After we place the order and reserve the truck we are set for the following week. The truck is reserved for Monday from noon to 4:30pm."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function PrepareColdItems() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Prep Cold Items",
+    description: "Prepare Cold Food Items."
+  }
+
+  const explainText = "Cold food items need to be prepared for DoorDash and Drive-thru weeks. We prepare all the cold items on Wednesday and store them in the DoorDash Freezers until they are ready to be added as the final item in the box."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function StageDryGoods() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Stage Dry Goods",
+    description: "Move non-perishable items to staging area."
+  }
+
+  const explainText = "After cold food items are prepared, we move the nonperishable items which will go into the box to the staging area. This is done on Wednesday and Thursday."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function PrepareInPersonPickup() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Prepare In-Person Pickup",
+    description: "Build boxes for in-person pickup."
+  }
+
+  const explainText = "All of the families that requested an in-person pickup time from the message sent out on Tuesday will be arriving today. Prepare those boxes of the pickup time."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function BuildDeliveryBoxes() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Build Delivery Boxes",
+    description: "Boxes for the DoorDash orders."
+  }
+
+  const explainText = "We have a set number of boxes that need to be built for DoorDash orders. These boxes are built on Thursday. The boxes are built with the non-perishable items for that box."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function TakeSamplePicture() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Take Sample Picture",
+    description: "Take a picture of the box items."
+  }
+
+  const explainText = "We send a picture of the box items to the families that are receiving the boxes. This is done on Friday morning and lets the family know what to expect in their box aswell as serves as a reminder to the family to expect a delivery."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function SealDeliveryBoxes() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Seal Boxes",
+    description: "Add frozen items and seal boxes."
+  }
+
+  const explainText = "The final step in preparing the boxes is to add the frozen items and seal the boxes. This is done on Friday morning. The boxes are then ready for delivery."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function RequestDoorDash() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Request DoorDash",
+    description: "Send your request to DoorDash."
+  }
+
+  const explainText = "Bulk DoorDash Delivery needs to be scheduled 1 hour prior to the first pickups. This is done on Friday morning. The DoorDash driver will arrive at noon if the request is made by 11 am."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function LoadDasherTrolley() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Load Box Trollies",
+    description: "Prepare boxes for each dasher."
+  }
+
+  const explainText = "Dasher's will be assigned up to 10 boxes each. The boxes are loaded onto the trollies and the dashers are given their delivery routes by DoorDash."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
+function MeetDasher() {
+  const [open, setOpen] = useState(false)
+  const task = {
+    name: "Meet Dashers",
+    description: "Meet with the DoorDash drivers."
+  }
+
+  const explainText = "Verifer Dasher's name and total number of deliveries. Hand out the trolley and delivery route. Answer any questions the Dasher may have."
+
+  return <div className="py-4">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          {task.name}
+        </CardTitle>
+        <CardDescription>
+          {task.description}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="prose text-slate-600">
+          {explainText}
+        </p>
+
+        <div className="mt-4">
+
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-1 gap-2">
+        <Button>Mark Complete</Button>
+
+      </CardFooter>
+    </Card>
+  </div>
+};
 
 
 
@@ -398,6 +958,38 @@ export function DayTasks({ task_id }: { task_id: string }) {
       return <DriveCisT />
     case 'unload-cold-pallets':
       return <OffloadColdPallets />
+    case 'unload-to-staging':
+      return <OffloadToStagingArea />
+    case 'store-dry-goods':
+      return <MoveToStorage />
+    case 'send-message':
+      return <MessageFamilies />
+    case 'prepare-inventory':
+      return <PrepareInventory />
+    case 'plan-menu':
+      return <PlanServiceMenu />
+    case 'place-order':
+      return <PlaceOrder />
+    case 'reserve-truck':
+      return <ReserveTruck />
+    case 'prepare-cold-items':
+      return <PrepareColdItems />
+    case 'stage-dry-goods':
+      return <StageDryGoods />
+    case 'prepare-pickup-orders':
+      return <PrepareInPersonPickup />
+    case 'build-boxes':
+      return <BuildDeliveryBoxes />
+    case 'take-box-photo':
+      return <TakeSamplePicture />
+    case 'seal-boxes':
+      return <SealDeliveryBoxes />
+    case 'request-doordash':
+      return <RequestDoorDash />
+    case 'load-trollies':
+      return <LoadDasherTrolley />
+    case 'meet-dashers':
+      return <MeetDasher />
     default:
       return <div>Task not found</div>
   }
