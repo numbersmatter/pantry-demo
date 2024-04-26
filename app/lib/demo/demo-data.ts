@@ -16,6 +16,7 @@ export interface WeekTaskData {
 export interface WeekData {
   title: string;
   taskData: WeekTaskData;
+  taskStatus: Record<string, boolean>;
 }
 
 const mondayTasks: DayTask[] = [

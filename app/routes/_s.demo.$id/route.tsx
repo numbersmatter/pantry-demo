@@ -14,6 +14,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     throw new Error("Weekplan not found",);
   }
 
+  const taskStatus = weekplan.taskStatus;
+
 
   const dbTabs = [
     { name: 'Monday', day: 'monday', count: 0 },
@@ -34,16 +36,17 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const taskData = weekplan.taskData;
   const title = weekplan.title;
-  return json({ title, taskData });
+  return json({ title, taskData, taskStatus });
 };
 
 
 export default function FoodPantryDemo() {
-  const { title } = useLoaderData<typeof loader>();
+  const { title, taskStatus } = useLoaderData<typeof loader>();
   return (
     <div className="px-2 py-2">
       <HeaderText title={title} />
       <Outlet />
+      <pre>{JSON.stringify(taskStatus, null, 2)}</pre>
     </div>
   )
 };

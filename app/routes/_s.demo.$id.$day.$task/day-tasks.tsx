@@ -19,7 +19,7 @@ import {
 } from "~/components/shadcn/ui/drawer";
 
 
-function CheckOutTruck() {
+function CheckOutTruck({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
 
 
@@ -65,22 +65,29 @@ function CheckOutTruck() {
 
 export type DriveStatus = "not-started" | "in-progress" | "completed" | "error" | "canceled"
 
-function DriveSecondHarvest() {
+function DriveSecondHarvest({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
-  const [driveStatus, setDriveStatus] = useState<DriveStatus>("not-started")
-
   const setStatusFetcher = useFetcher();
 
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
         method: "post",
       })
-    setDriveStatus("completed")
+  }
+  const handleMarkInComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "incomplete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
   }
 
 
@@ -111,7 +118,7 @@ function DriveSecondHarvest() {
       <Card>
         <CardHeader>
           <CardTitle>
-            {task.name}
+            {task.name}{taskComplete ? " - Completed" : ""}
           </CardTitle>
           <CardDescription>
             {task.description}
@@ -128,9 +135,14 @@ function DriveSecondHarvest() {
           </div>
         </CardContent>
         <CardFooter className="grid grid-cols-1 gap-2">
-          <Button type="button" onClick={handleMarkComplete}>
-            Mark Complete
-          </Button>
+          {
+            taskComplete ? <Button variant="outline" onClick={handleMarkInComplete}>
+              Change to Incomplete
+            </Button> :
+              <Button type="button" onClick={handleMarkComplete}>
+                Mark Complete
+              </Button>
+          }
           <Button variant={"destructive"} onClick={() => setOpen(true)}>
             Report Problem
           </Button>
@@ -166,7 +178,7 @@ function DriveSecondHarvest() {
     </div>
   )
 }
-function DriveCisT() {
+function DriveCisT({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
   const [driveStatus, setDriveStatus] = useState<DriveStatus>("not-started")
   const setStatusFetcher = useFetcher();
@@ -174,13 +186,23 @@ function DriveCisT() {
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
         method: "post",
       })
     setDriveStatus("completed")
+  }
+  const handleMarkInComplete = async () => {
+    await setStatusFetcher.submit(
+      {
+        newStatus: "incomplete",
+        _action: "setTaskStatus"
+      },
+      {
+        method: "post",
+      })
   }
 
 
@@ -211,7 +233,7 @@ function DriveCisT() {
       <Card>
         <CardHeader>
           <CardTitle>
-            {task.name}
+            {task.name} {taskComplete ? " - Completed" : ""}
           </CardTitle>
           <CardDescription>
             {task.description}
@@ -228,9 +250,13 @@ function DriveCisT() {
           </div>
         </CardContent>
         <CardFooter className="grid grid-cols-1 gap-2">
-          <Button type="button" onClick={handleMarkComplete}>
-            Mark Complete
+          <Button
+            variant={taskComplete ? "outline" : "default"}
+            onClick={handleMarkComplete}
+          >
+            {taskComplete ? "Mark Incomplete" : "Mark Complete"}
           </Button>
+
           <Button variant={"destructive"} onClick={() => setOpen(true)}>
             Report Problem
           </Button>
@@ -268,7 +294,7 @@ function DriveCisT() {
 }
 
 
-function AcceptOrder() {
+function AcceptOrder({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
   const inputFile = useRef(null);
   const task = {
@@ -280,13 +306,14 @@ function AcceptOrder() {
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
         method: "post",
       })
   }
+
 
   const explainText = "When you arrive at Second Harvest Food Bank you will need to sign for the pallets and inspect the order. After signing for the order use your phone to take a picture of the order and upload it here."
 
@@ -323,8 +350,12 @@ function AcceptOrder() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
         <Button variant={"destructive"} onClick={() => setOpen(true)}>
           Report Problem
@@ -363,19 +394,20 @@ function AcceptOrder() {
 }
 
 
-function OffloadColdPallets() {
+function OffloadColdPallets({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
         method: "post",
       })
   }
+
   const task = {
     name: "Storge Cold Pallets",
     description: "Any frozen or refrigerated items moved to cold storage."
@@ -403,8 +435,13 @@ function OffloadColdPallets() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete
+          }
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
         <Button variant={"destructive"} onClick={() => setOpen(true)}>
           Report Problem
@@ -440,13 +477,13 @@ function OffloadColdPallets() {
     </Drawer>
   </div>
 };
-function OffloadToStagingArea() {
+function OffloadToStagingArea({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -481,21 +518,24 @@ function OffloadToStagingArea() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
-
       </CardFooter>
     </Card>
   </div>
 };
-function MoveToStorage() {
+function MoveToStorage({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -530,21 +570,24 @@ function MoveToStorage() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
-
       </CardFooter>
     </Card>
   </div>
 };
-function MessageFamilies() {
+function MessageFamilies({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -579,21 +622,24 @@ function MessageFamilies() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
-
       </CardFooter>
     </Card>
   </div>
 };
-function PrepareInventory() {
+function PrepareInventory({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -628,21 +674,24 @@ function PrepareInventory() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
-
       </CardFooter>
     </Card>
   </div>
 };
-function PlanServiceMenu() {
+function PlanServiceMenu({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false)
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -677,20 +726,24 @@ function PlanServiceMenu() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
       </CardFooter>
     </Card>
   </div>
 };
-function PlaceOrder() {
+function PlaceOrder({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -725,20 +778,24 @@ function PlaceOrder() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
       </CardFooter>
     </Card>
   </div>
 };
-function ReserveTruck() {
+function ReserveTruck({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -773,20 +830,25 @@ function ReserveTruck() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete
+          }
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
       </CardFooter>
     </Card>
   </div>
 };
-function PrepareColdItems() {
+function PrepareColdItems({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -821,20 +883,24 @@ function PrepareColdItems() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
       </CardFooter>
     </Card>
   </div>
 };
-function StageDryGoods() {
+function StageDryGoods({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -869,20 +935,25 @@ function StageDryGoods() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
+
       </CardFooter>
     </Card>
   </div>
 };
-function PrepareInPersonPickup() {
+function PrepareInPersonPickup({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -917,20 +988,24 @@ function PrepareInPersonPickup() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
       </CardFooter>
     </Card>
   </div>
 };
-function BuildDeliveryBoxes() {
+function BuildDeliveryBoxes({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -965,21 +1040,24 @@ function BuildDeliveryBoxes() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
-
       </CardFooter>
     </Card>
   </div>
 };
-function TakeSamplePicture() {
+function TakeSamplePicture({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -1014,21 +1092,24 @@ function TakeSamplePicture() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
-
       </CardFooter>
     </Card>
   </div>
 };
-function SealDeliveryBoxes() {
+function SealDeliveryBoxes({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -1063,21 +1144,24 @@ function SealDeliveryBoxes() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
-
       </CardFooter>
     </Card>
   </div>
 };
-function RequestDoorDash() {
+function RequestDoorDash({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -1112,21 +1196,24 @@ function RequestDoorDash() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
-
       </CardFooter>
     </Card>
   </div>
 };
-function LoadDasherTrolley() {
+function LoadDasherTrolley({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -1161,21 +1248,25 @@ function LoadDasherTrolley() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
 
       </CardFooter>
     </Card>
   </div>
 };
-function MeetDasher() {
+function MeetDasher({ taskComplete }: { taskComplete: boolean }) {
   const [open, setOpen] = useState(false);
   const setStatusFetcher = useFetcher();
   const handleMarkComplete = async () => {
     await setStatusFetcher.submit(
       {
-        newStatus: "complete",
+        newStatus: taskComplete ? "incomplete" : "complete",
         _action: "setTaskStatus"
       },
       {
@@ -1210,10 +1301,13 @@ function MeetDasher() {
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
-        <Button type="button" onClick={handleMarkComplete}>
-          Mark Complete
+        <Button
+          type="button"
+          onClick={handleMarkComplete}
+          variant={taskComplete ? "outline" : "default"}
+        >
+          {taskComplete ? "Mark Incomplete" : "Mark Complete"}
         </Button>
-
       </CardFooter>
     </Card>
   </div>
@@ -1221,51 +1315,54 @@ function MeetDasher() {
 
 
 
-export function DayTasks({ task_id }: { task_id: string }) {
+export function DayTasks({ task_id, taskStatus }: { task_id: string, taskStatus: { [key: string]: boolean } }) {
 
+  const taskComplete = taskStatus[task_id] ?? false;
+  console.log('task_id', task_id)
+  console.log(taskStatus[task_id])
   switch (task_id) {
     case 'check-out-truck':
-      return <CheckOutTruck />
+      return <CheckOutTruck taskComplete={taskComplete} />
     case 'drive-second-harvest':
-      return <DriveSecondHarvest />
+      return <DriveSecondHarvest taskComplete={taskComplete} />
     case 'accept-order':
-      return <AcceptOrder />
+      return <AcceptOrder taskComplete={taskComplete} />
     case 'drive-cis-t':
-      return <DriveCisT />
+      return <DriveCisT taskComplete={taskComplete} />
     case 'unload-cold-pallets':
-      return <OffloadColdPallets />
+      return <OffloadColdPallets taskComplete={taskComplete} />
     case 'unload-to-staging':
-      return <OffloadToStagingArea />
+      return <OffloadToStagingArea taskComplete={taskComplete} />
     case 'store-dry-goods':
-      return <MoveToStorage />
+      return <MoveToStorage taskComplete={taskComplete} />
     case 'send-message':
-      return <MessageFamilies />
+      return <MessageFamilies taskComplete={taskComplete} />
     case 'prepare-inventory':
-      return <PrepareInventory />
+      return <PrepareInventory taskComplete={taskComplete} />
     case 'plan-menu':
-      return <PlanServiceMenu />
+      return <PlanServiceMenu taskComplete={taskComplete} />
     case 'place-order':
-      return <PlaceOrder />
+      return <PlaceOrder taskComplete={taskComplete} />
     case 'reserve-truck':
-      return <ReserveTruck />
+      return <ReserveTruck taskComplete={taskComplete} />
     case 'prepare-cold-items':
-      return <PrepareColdItems />
+      return <PrepareColdItems taskComplete={taskComplete} />
     case 'stage-dry-goods':
-      return <StageDryGoods />
+      return <StageDryGoods taskComplete={taskComplete} />
     case 'prepare-pickup-orders':
-      return <PrepareInPersonPickup />
+      return <PrepareInPersonPickup taskComplete={taskComplete} />
     case 'build-boxes':
-      return <BuildDeliveryBoxes />
+      return <BuildDeliveryBoxes taskComplete={taskComplete} />
     case 'take-box-photo':
-      return <TakeSamplePicture />
+      return <TakeSamplePicture taskComplete={taskComplete} />
     case 'seal-boxes':
-      return <SealDeliveryBoxes />
+      return <SealDeliveryBoxes taskComplete={taskComplete} />
     case 'request-doordash':
-      return <RequestDoorDash />
+      return <RequestDoorDash taskComplete={taskComplete} />
     case 'load-trollies':
-      return <LoadDasherTrolley />
+      return <LoadDasherTrolley taskComplete={taskComplete} />
     case 'meet-dashers':
-      return <MeetDasher />
+      return <MeetDasher taskComplete={taskComplete} />
     default:
       return <div>Task not found</div>
   }

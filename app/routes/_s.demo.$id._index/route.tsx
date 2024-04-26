@@ -3,8 +3,6 @@ import { Form, Link, json, useLoaderData } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { db } from "~/lib/database/firestore.server";
-import { createWeekStatus } from "~/lib/database/weekplan/domain-funcs";
-import { SingleButtonForm } from "~/components/common/single-button-form";
 import { makeDomainFunction } from "domain-functions";
 import { demoData } from "~/lib/demo/demo-data";
 import { z } from "zod";

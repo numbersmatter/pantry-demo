@@ -71,7 +71,13 @@ export default function TaskRoute() {
   const params = useParams();
   const task_id = params.task as string;
 
-  return <DayTasks task_id={task_id} />
+  const matches = useMatches();
+
+  const weekPlan = matches.find(m => m.id === "routes/_s.demo.$id")?.data as WeekData
+
+  const taskStatus = weekPlan.taskStatus;
+
+  return <DayTasks task_id={task_id} taskStatus={taskStatus} />
 
 }
 
