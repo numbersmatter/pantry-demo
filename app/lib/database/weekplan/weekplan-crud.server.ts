@@ -60,8 +60,14 @@ const updateWeekPlan = async ({
   return write;
 };
 
+const getAll = async (): Promise<WeekPlan[]> => {
+  const snapshot = await weekplanCollection().get();
+  return snapshot.docs.map((doc) => doc.data());
+};
+
 export const weekPlanDb = {
   read: readWeekPlan,
   create: createWeekPlan,
   update: updateWeekPlan,
+  getAll,
 };

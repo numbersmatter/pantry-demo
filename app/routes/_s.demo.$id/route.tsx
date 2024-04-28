@@ -1,5 +1,5 @@
-import { Outlet, json, useLoaderData } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import { Outlet, useLoaderData, } from "@remix-run/react"
+import { LoaderFunctionArgs, json } from "@remix-run/node";
 import { HeaderText } from "./header";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { db } from "~/lib/database/firestore.server";
