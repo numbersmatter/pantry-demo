@@ -12,10 +12,25 @@ import { SectionHeader } from "~/components/common/header-tabs";
 import { DataTable } from "~/components/display/data-table";
 import { weekPlanColumns } from "~/lib/database/weekplan/tables";
 import { CreateNewPlan } from "./create-new-plan";
+import { makeDomainFunction } from "domain-functions";
+import { performMutation } from "remix-forms";
 
 const schema = z.object({
   _action: z.literal("create"),
+  title: z.string().min(3),
 });
+
+const newPlanMutation = (data: any) => makeDomainFunction(schema)(
+  async (values) => {
+    const weekplanId = await db.weekplan.create({
+      title: values.title,
+      taskData: data,
+      taskStatus: {},
+    });
+
+    return weekplanId;
+  }
+)
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await protectedRoute(request);
@@ -30,19 +45,25 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
+  const formData = await request.clone().formData();
   const action = formData.get("_action");
   const data = demoData
 
   if (action === "create") {
+    const result = await performMutation({
+      request,
+      schema,
+      mutation: newPlanMutation(data),
+    })
 
-    const weekplan = await db.weekplan.create({
-      title: "April 15-19, 2024 Food Box Program",
-      taskData: data,
-      taskStatus: createWeekStatus(data),
-    });
+    if (!result.success) {
+      const errors = result.errors;
 
-    return redirect(`/demo/${weekplan.id}`);
+      return json(errors, { status: 400 })
+    }
+
+
+    return redirect(`/demo/${result.data}`);
   }
 
   return json({}, { status: 200 });
@@ -57,7 +78,7 @@ export default function Route() {
       <SectionHeader title="Week Plans" text2="test" text3="" />
       <CreateNewPlan />
       <DataTable data={data.weekplans} columns={weekPlanColumns} />
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
     </div>
   )
 

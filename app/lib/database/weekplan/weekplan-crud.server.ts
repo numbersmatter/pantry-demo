@@ -35,7 +35,7 @@ const readWeekPlan = async (id: string): Promise<WeekPlan | undefined> => {
   return doc.exists ? doc.data() : undefined;
 };
 
-const createWeekPlan = async (weekplan: WeekPlanBase): Promise<WeekPlan> => {
+const createWeekPlan = async (weekplan: WeekPlanBase): Promise<string> => {
   const colRef = weekplanCollection();
   const docRef = colRef.doc();
   const data = {
@@ -43,7 +43,7 @@ const createWeekPlan = async (weekplan: WeekPlanBase): Promise<WeekPlan> => {
     id: docRef.id,
   };
   await docRef.set(data);
-  return data;
+  return docRef.id;
 };
 
 const updateWeekPlan = async ({
