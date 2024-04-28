@@ -20,3 +20,22 @@ export const setTaskStatus = (
 
     return db.weekplan.update({ weekplanId, data: updateData });
   });
+
+export const recordOdometerSchema = z.object({
+  _action: z.literal("recordOdometer"),
+  odometer: z.coerce.number().min(10),
+});
+
+export const recordOdometer = (weekplanId: string, taskId: string) =>
+  makeDomainFunction(recordOdometerSchema)(async (data) => {
+    const { odometer } = data;
+    const updateData = {
+      [`dataEntry.odometer`]: odometer,
+      [`taskStatus.${taskId}`]: true,
+    };
+
+    return db.weekplan.update({
+      weekplanId: weekplanId,
+      data: updateData,
+    });
+  });

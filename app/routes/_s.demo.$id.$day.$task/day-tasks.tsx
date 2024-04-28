@@ -19,7 +19,7 @@ import {
 } from "~/components/shadcn/ui/drawer";
 
 
-function CheckOutTruck({ taskComplete }: { taskComplete: boolean }) {
+function CheckOutTruck({ taskComplete, errors, dataEntry }: { taskComplete: boolean, errors: Record<string, string[]>, dataEntry: Record<string, string | number> }) {
   const [open, setOpen] = useState(false)
 
 
@@ -30,7 +30,9 @@ function CheckOutTruck({ taskComplete }: { taskComplete: boolean }) {
 
   const truckText = "On Mondays you will need to pickup our weekly order of food from Second Harvest Food Bank. The address is 1234 Main St. and you will need to be there by 2:30pm. The Executive Director will have the keys for the truck in their office. When you have received the keys enter the Odometer reading in the form to complete the task."
 
+  const odometerError = errors.odometer ? errors.odometer[0] : ""
 
+  const currentOdometer = dataEntry.odometer ? dataEntry.odometer : 0
 
   return (
     <div className="py-4">
@@ -53,9 +55,14 @@ function CheckOutTruck({ taskComplete }: { taskComplete: boolean }) {
         description="Enter the odometer reading for the truck here."
       >
         <Form method="post">
-          <FormNumberField label="Odometer Reading" id="odometer" />
+          <FormNumberField
+            label="Odometer Reading"
+            id="odometer"
+            defaultValue={currentOdometer}
+            error={odometerError}
+          />
           <div className="py-3 flex justify-end">
-            <Button type="submit">Submit</Button>
+            <Button name="_action" value="recordOdometer" type="submit">Submit</Button>
           </div>
         </Form>
       </TaskDrawer>
@@ -1315,14 +1322,20 @@ function MeetDasher({ taskComplete }: { taskComplete: boolean }) {
 
 
 
-export function DayTasks({ task_id, taskStatus }: { task_id: string, taskStatus: { [key: string]: boolean } }) {
+export function DayTasks({
+  task_id, taskStatus, errors, dataEntry
+}: {
+  task_id: string,
+  taskStatus: { [key: string]: boolean },
+  errors: Record<string, string[]>,
+  dataEntry: Record<string, string | number>
+}) {
 
   const taskComplete = taskStatus[task_id] ?? false;
-  console.log('task_id', task_id)
-  console.log(taskStatus[task_id])
+
   switch (task_id) {
     case 'check-out-truck':
-      return <CheckOutTruck taskComplete={taskComplete} />
+      return <CheckOutTruck taskComplete={taskComplete} errors={errors} dataEntry={dataEntry} />
     case 'drive-second-harvest':
       return <DriveSecondHarvest taskComplete={taskComplete} />
     case 'accept-order':

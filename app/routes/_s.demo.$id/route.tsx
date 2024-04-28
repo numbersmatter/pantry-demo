@@ -34,9 +34,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   });
 
 
+  const dataEntry = weekplan.dataEntry ?? {};
   const taskData = weekplan.taskData;
   const title = weekplan.title;
-  return json({ title, taskData, taskStatus });
+  return json({ title, taskData, taskStatus, dataEntry });
 };
 
 

@@ -30,6 +30,7 @@ export interface WeekPlanBase {
   title: string;
   taskData: WeekTaskData;
   taskStatus: TaskStatus;
+  dataEntry?: Record<string, string | number>;
 }
 
 export interface WeekPlanDBModel extends WeekPlanBase {}
