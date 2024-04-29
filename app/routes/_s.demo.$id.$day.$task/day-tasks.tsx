@@ -437,9 +437,10 @@ function OffloadColdPallets({ taskComplete }: { taskComplete: boolean }) {
           {explainText}
         </p>
 
-        <div className="aspect-w-16 aspect-h-9">
+        <div className="aspect-video">
           {/* @tslint expect-error */}
-          <iframe src="https://www.youtube.com/embed/S5TpiNRgQs4?si=BXHqGi_s5IoURnyv" title="YouTube video player" frameBorder="0" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+          <iframe className="h-full w-full rounded-lg"
+            src="https://www.youtube.com/embed/S5TpiNRgQs4?si=BXHqGi_s5IoURnyv" title="YouTube video player" frameBorder="0" allow="accelerometer;   clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
@@ -1303,9 +1304,11 @@ function MeetDasher({ taskComplete }: { taskComplete: boolean }) {
         <p className="prose text-slate-600">
           {explainText}
         </p>
-        {/* @tslint expect-error */}
-        <iframe src="https://www.youtube.com/embed/cRvVfjc1f-g?si=fze7PjHWR37_lk9l" title="YouTube video player" frameBorder="0" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
-
+        <div className="aspect-video">
+          {/* @tslint expect-error */}
+          <iframe className="h-full w-full rounded-lg"
+            src="https://www.youtube.com/embed/cRvVfjc1f-g?si=fze7PjHWR37_lk9l" title="YouTube video player" frameBorder="0" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+        </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
         <Button
