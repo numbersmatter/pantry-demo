@@ -14,6 +14,7 @@ const navigation = [
   { name: 'Families', href: '/families/', current: false },
   // { name: 'Program Areas', href: '/program-areas/', current: false },
   { name: 'Programs', href: '/programs/', current: false },
+  { name: 'Weekplan', href: '/demo/', current: false },
   // { name: 'Service Periods', href: '/service-periods/', current: false },
   // { name: 'Service Lists', href: '/service-lists/', current: false },
   // { name: 'Drive-Thru', href: '/drive-thru/', current: false },

@@ -420,7 +420,7 @@ function OffloadColdPallets({ taskComplete }: { taskComplete: boolean }) {
     description: "Any frozen or refrigerated items moved to cold storage."
   }
 
-  const explainText = " The address is  19 East Guilford Street, Thomasville, NC 27360."
+  const explainText = "Unload frozen or refrigerated items from the truck and move them to the cold storage area."
 
   return <div className="py-4">
     <Card>
@@ -433,12 +433,13 @@ function OffloadColdPallets({ taskComplete }: { taskComplete: boolean }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="prose text-slate-600">
+        <p className="prose text-slate-600 py-4">
           {explainText}
         </p>
 
-        <div className="mt-4">
-
+        <div className="aspect-w-16 aspect-h-9">
+          {/* @tslint expect-error */}
+          <iframe src="https://www.youtube.com/embed/S5TpiNRgQs4?si=BXHqGi_s5IoURnyv" title="YouTube video player" frameBorder="0" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
         </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
@@ -1302,10 +1303,9 @@ function MeetDasher({ taskComplete }: { taskComplete: boolean }) {
         <p className="prose text-slate-600">
           {explainText}
         </p>
+        {/* @tslint expect-error */}
+        <iframe src="https://www.youtube.com/embed/cRvVfjc1f-g?si=fze7PjHWR37_lk9l" title="YouTube video player" frameBorder="0" allow="accelerometer;  clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
 
-        <div className="mt-4">
-
-        </div>
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
         <Button

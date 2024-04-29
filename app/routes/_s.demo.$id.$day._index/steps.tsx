@@ -29,7 +29,7 @@ export default function VerticalSteps({
                 ) : null}
                 <Link to={step.to} className="group relative flex items-start">
                   <span className="flex h-9 items-center">
-                    <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 group-hover:bg-indigo-800">
+                    <span className="relative z-0 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 group-hover:bg-indigo-800">
                       <CheckIcon className="h-5 w-5 text-white" aria-hidden="true" />
                     </span>
                   </span>
@@ -46,7 +46,7 @@ export default function VerticalSteps({
                 ) : null}
                 <Link to={step.to} className="group relative flex items-start" aria-current="step">
                   <span className="flex h-9 items-center" aria-hidden="true">
-                    <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-indigo-600 bg-white">
+                    <span className="relative z-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-indigo-600 bg-white">
                       <span className="h-2.5 w-2.5 rounded-full bg-indigo-600" />
                     </span>
                   </span>
@@ -63,7 +63,7 @@ export default function VerticalSteps({
                 ) : null}
                 <Link to={step.to} className="group relative flex items-start">
                   <span className="flex h-9 items-center" aria-hidden="true">
-                    <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">
+                    <span className="relative z-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white group-hover:border-gray-400">
                       <span className="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300" />
                     </span>
                   </span>

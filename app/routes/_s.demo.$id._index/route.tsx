@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
-import { Form, Link, json, useLoaderData } from "@remix-run/react"
+import { Form, Link, json, useLoaderData, useNavigate } from "@remix-run/react"
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { db } from "~/lib/database/firestore.server";
@@ -70,19 +70,26 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function Route() {
   const { } = useLoaderData<typeof loader>();
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate('monday');
+  }
 
   return (
     <div className="flex-col flex gap-5">
-      <Link to="monday">
+      <Button variant={"default"} className="" onClick={handleNavigate}>
         Start Monday
-      </Link>
+      </Button>
 
-      <Form method="post">
-        <Button type="submit" variant={"destructive"}>
-          Reset Data
-        </Button>
-        <input type="hidden" name="_action" value="setDemoData" />
-      </Form>
+      <div className="py-3 px-6">
+        <Form method="post">
+          <Button type="submit" variant={"destructive"}>
+            Reset Data
+          </Button>
+          <input type="hidden" name="_action" value="setDemoData" />
+        </Form>
+      </div>
     </div>
   )
 
