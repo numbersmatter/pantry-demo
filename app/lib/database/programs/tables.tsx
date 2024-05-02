@@ -15,6 +15,13 @@ export const programsOfAreaColumns: ColumnDef<Program>[] = [
   {
     accessorKey: "name",
     header: "Name",
+    cell: ({ row }) => {
+      return (
+        <Link to={`/programs/${row.original.id}`}>
+          {row.original.name}
+        </Link>
+      )
+    }
   },
   {
     accessorKey: "program_area",
@@ -23,7 +30,7 @@ export const programsOfAreaColumns: ColumnDef<Program>[] = [
   {
     id: "id",
     accessorKey: "id",
-    header: "Link",
+    header: "Current Period",
     cell: ({ row }) => {
       return (
         <SingleButtonFetcher
@@ -40,6 +47,29 @@ export const programsOfAreaColumns: ColumnDef<Program>[] = [
 ]
 
 
+export const programsTableColumns: ColumnDef<Program>[] = [
+  {
+    accessorKey: "name",
+    header: "Name",
+  },
+  {
+    accessorKey: "criteria",
+    header: "Criteria",
+  },
+  {
+    id: "id",
+    accessorKey: "id",
+    header: "Link",
+    cell: ({ row }) => {
+      return (
+        <Link to={`/programs/${row.original.id}`}>
+          View
+        </Link>
+      )
+    }
+  },
+
+]
 
 
 

@@ -5,12 +5,9 @@ import { makeDomainFunction } from "domain-functions";
 import { Button } from "~/components/shadcn/ui/button";
 import { performMutation } from "remix-forms";
 import { z } from "zod";
-import { ContainerPadded } from "~/components/common/containers";
-import { FormDialog, FormDialogVer1 } from "~/components/common/form-dialog";
+import { FormDialog, } from "~/components/common/form-dialog";
 import { HeaderTabs, SectionHeader, TabOption } from "~/components/common/header-tabs";
 import { DataTable } from "~/components/display/data-table";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "~/components/shadcn/ui/card";
-import { Input } from "~/components/shadcn/ui/input";
 import { Label } from "~/components/shadcn/ui/label";
 import { protectedRoute } from "~/lib/auth/auth.server";
 import { programsDb } from "~/lib/database/programs/programs-crud.server";
@@ -175,7 +172,7 @@ export default function ProgramIDRouteServicePeriods() {
               </div>
             </div>
             <DialogFooter className="justify-between">
-              <DialogClose>
+              <DialogClose asChild>
                 <Button type={"button"} variant="outline">
                   Cancel
                 </Button>
@@ -189,6 +186,8 @@ export default function ProgramIDRouteServicePeriods() {
       </div>
       <div className="mt-6" />
       <DataTable columns={servicePeriodsOfProgramColumns} data={servicePeriodTableData} />
+      <pre>{JSON.stringify(servicePeriods, null, 2)}</pre>
     </>
+
   )
 }

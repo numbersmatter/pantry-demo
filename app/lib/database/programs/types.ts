@@ -7,6 +7,7 @@ export interface Program {
 
 export interface ProgramDbModel {
   program_area_id: string;
+
   name: string;
   criteria: string;
 }
