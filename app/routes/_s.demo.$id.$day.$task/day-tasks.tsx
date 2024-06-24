@@ -17,6 +17,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "~/components/shadcn/ui/drawer";
+import AddMenuItemDialog from "~/components/pages/service-lists/add-menu-item-dialog";
+import { DataTable } from "~/components/display/data-table";
+import { serviceListItemsUpdateCol } from "~/lib/database/service-lists/tables";
 
 
 function CheckOutTruck({ taskComplete, errors, dataEntry }: { taskComplete: boolean, errors: Record<string, string[]>, dataEntry: Record<string, string | number> }) {
@@ -733,6 +736,22 @@ function PlanServiceMenu({ taskComplete }: { taskComplete: boolean }) {
         <div className="mt-4">
 
         </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Menu Items</CardTitle>
+            <CardDescription>
+              Add the menu items for this service list.
+            </CardDescription>
+          </CardHeader>
+          <DataTable
+            columns={serviceListItemsUpdateCol}
+            data={[]}
+          />
+          <CardFooter className="py-2">
+            <AddMenuItemDialog actionUrl={""} />
+          </CardFooter>
+        </Card>
+
       </CardContent>
       <CardFooter className="grid grid-cols-1 gap-2">
         <Button

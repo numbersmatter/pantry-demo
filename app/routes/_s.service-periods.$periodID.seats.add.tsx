@@ -7,6 +7,7 @@ import { performMutation } from "remix-forms";
 import { z } from "zod";
 import { FormTextArea } from "~/components/forms/text-area";
 import { AddSeatsTabs } from "~/components/pages/service-periods/add-seat-tabs";
+import { AddSeatsFromServicePeriod } from "~/components/pages/service-periods/add-seats-from-service-period";
 import { ServicePeriodTabs } from "~/components/pages/service-periods/headers";
 import { Button } from "~/components/shadcn/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "~/components/shadcn/ui/dialog";
@@ -15,6 +16,7 @@ import { protectedRoute } from "~/lib/auth/auth.server";
 import { familyDb } from "~/lib/database/families/family-crud.server";
 import { db } from "~/lib/database/firestore.server";
 import { personDb } from "~/lib/database/person/person-crud.server";
+import { AddFromServicePeriodSchema, addFromServicePeriodMutation } from "~/lib/database/seats/domain-functions";
 import { seatsDb } from "~/lib/database/seats/seats-crud.server";
 import { servicePeriodExists } from "~/lib/database/service-periods/domain-logic/checks.server";
 import { ServicePeriodId } from "~/lib/database/service-periods/types/service-periods-model";
@@ -129,6 +131,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     return json({ result });
   }
 
+  if (type === "addFromServicePeriod") {
+    const result = await performMutation({
+      request,
+      schema: AddFromServicePeriodSchema,
+      mutation: addFromServicePeriodMutation(periodID)
+    });
+
+    return json({ result });
+
+  }
+
   return json({ result: { success: false, errors: { _global: ["Invalid form submission"] } } });
 };
 
@@ -154,9 +167,18 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     !added_family_ids.includes(family.id)
   );
 
+  const service_periods = await db.service_period.getAll();
+
+  const service_period_options = service_periods.map((service_period) => {
+    return {
+      label: service_period.name,
+      value: service_period.id,
+    };
+  })
 
 
-  return json({ families_not_added });
+
+  return json({ families_not_added, service_period_options });
 };
 
 
@@ -166,9 +188,12 @@ export default function Route() {
 
   return (
     <div>
+      <AddSeatsFromServicePeriod service_period_options={data.service_period_options} />
+
       <div className="mx-auto prose">
         <h3>Add Seat to Service Period</h3>
       </div>
+
       <div className="grid grid-cols-1 gap-2">
         {
           data.families_not_added.map((family) => {
